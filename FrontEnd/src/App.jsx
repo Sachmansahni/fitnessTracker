@@ -1,12 +1,14 @@
-import React from "react";
-import PlankTracker from "./components/PlankTracker";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import routes from "./routes";
 
-const App = () => {
-    return (
-        <div>
-            <PlankTracker />
-        </div>
-    );
-};
-
-export default App;
+export default function App() {
+  return (
+    <Router>
+      <Routes>
+        {routes.map(({ path, element }, index) => (
+          <Route key={index} path={path} element={element} />
+        ))}
+      </Routes>
+    </Router>
+  );
+}
