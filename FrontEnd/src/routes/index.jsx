@@ -5,8 +5,8 @@ import PlankTracker from "../components/PlankTracker";
 
 const routes = [
   { path: "/", element: <Home /> },
-  // { path: "/", element: <PlankTracker /> },
-  // { path: "/", element: <WorkoutTracker /> },
+  { path: "/plank-tracker", element: <PlankTracker /> },
+  { path: "/workout-tracker", element: <WorkoutTracker /> },
   { path: "/auth", element: <AuthPopup /> },
 ];
 
