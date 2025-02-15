@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 function Home() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const userStatus = localStorage.getItem("isUserLoggedIn");
+    setIsUserLoggedIn(userStatus === "true");
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-myTeal relative overflow-hidden">
@@ -14,18 +20,23 @@ function Home() {
         {/* Left Content */}
         <div className="text-left max-w-md text-gray-800">
           <div className="mt-4 space-y-2">
-            <h1 className="text-4xl font-bold mb-4">Welcome to Fitness Tracker</h1>
-            <p className="text-lg max-w-2xl mb-6">
-              Track your workouts, monitor your progress, and stay fit with our advanced fitness tracking system.
-            </p><br />
-            <Link to="/auth" className="bg-blue-900 text-white px-6 py-2 rounded-lg shadow-md">
-              Get Started
-            </Link>
-          </div>
-          <div className="mt-6 space-x-4">
-            <button onClick={() => setIsOpen(true)} className="bg-myPeach text-white px-6 py-2 rounded-lg shadow-md">
-              Demo Video
-            </button>
+            <h1 className="text-7xl font-bold mb-4">Welcome to Fitness Tracker</h1>
+            {isUserLoggedIn ? (
+              <div className="space-y-4">
+                <Link to="/plank-tracker" className="bg-blue-900 text-white px-6 py-2 rounded-lg shadow-md block text-center">Plank Tracker</Link>
+                <Link to="/pushup-tracker" className="bg-blue-700 text-white px-6 py-2 rounded-lg shadow-md block text-center">Push-up Tracker</Link>
+                <Link to="/squat-tracker" className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow-md block text-center">Squat Tracker</Link>
+                <Link to="/workout-tracker" className="bg-blue-300 text-white px-6 py-2 rounded-lg shadow-md block text-center">Workout Tracker</Link>
+              </div>
+            ) : (
+              <>
+                <p className="text-xl max-w-2xl mb-6">Track your workouts, monitor your progress, and stay fit with our advanced fitness tracking system.</p>
+                <div className="mt-6 space-x-4">
+                  <Link to="/auth" className="bg-blue-900 text-white px-6 py-2 rounded-lg shadow-md">Get Started</Link>
+                  <button onClick={() => setIsOpen(true)} className="bg-myPeach text-white px-6 py-2 rounded-lg shadow-md">Demo Video</button>
+                </div>
+              </>
+            )}
           </div>
         </div>
 

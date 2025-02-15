@@ -38,7 +38,7 @@ const WorkoutTracker = () => {
             }, "image/jpeg");
         };
 
-        const frameInterval = setInterval(sendFrames, 100);
+        const frameInterval = setInterval(sendFrames, 20);
 
         return () => {
             clearInterval(frameInterval);
