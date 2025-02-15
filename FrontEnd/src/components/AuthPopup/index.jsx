@@ -12,7 +12,7 @@ function AuthPopup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = type === "signup" ? "/api/signup" : "/api/login";
+    const url = type === "signup" ? "http://localhost:8000/signup" : "http://localhost:8000/login";
     try {
       const response = await fetch(url, {
         method: "POST",
