@@ -4,14 +4,14 @@ import { createWebSocket } from "../../util/websocket";
 const WorkoutTracker = () => {
     const videoRef = useRef(null);
     const youtubeRef = useRef(null);
-    const canvasRef = useRef(document.createElement("canvas"));
+    const canvasRef = useRef(null);
     const socketRef = useRef(null);
     const [status, setStatus] = useState("Not Detected");
     const [exerciseTime, setExerciseTime] = useState(0);
-    
+
     useEffect(() => {
         socketRef.current = createWebSocket(setStatus, setExerciseTime);
-        
+
         navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
@@ -19,30 +19,33 @@ const WorkoutTracker = () => {
         });
 
         const sendFrames = () => {
+            if (!videoRef.current || !canvasRef.current) return;
             const canvas = canvasRef.current;
             const context = canvas.getContext("2d");
-            const screenWidth = window.innerWidth;
-            const screenHeight = window.innerHeight;
-            
-            canvas.width = screenWidth;
-            canvas.height = screenHeight;
-            context.drawImage(document.body, 0, 0, screenWidth, screenHeight);
-            
+            canvas.width = videoRef.current.videoWidth;
+            canvas.height = videoRef.current.videoHeight;
+            context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+
             canvas.toBlob((blob) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(blob);
-                reader.onloadend = () => {
-                    const base64data = reader.result.split(",")[1];
-                    socketRef.current.send(JSON.stringify({ frame: base64data }));
-                };
+                if (blob && socketRef.current) {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(blob);
+                    reader.onloadend = () => {
+                        const base64data = reader.result.split(",")[1];
+                        socketRef.current.send(JSON.stringify({ frame: base64data }));
+                    };
+                }
             }, "image/jpeg");
         };
 
-        const frameInterval = setInterval(sendFrames, 20);
+        const frameInterval = setInterval(sendFrames, 100);
 
         return () => {
             clearInterval(frameInterval);
-            socketRef.current.close();
+            socketRef.current?.close();
+            if (videoRef.current?.srcObject) {
+                videoRef.current.srcObject.getTracks().forEach(track => track.stop());
+            }
         };
     }, []);
 
@@ -70,6 +73,7 @@ const WorkoutTracker = () => {
                     ></iframe>
                 </div>
             </div>
+            <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
         </div>
     );
 };

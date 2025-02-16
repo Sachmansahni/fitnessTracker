@@ -30,10 +30,10 @@ function PlankTracker() {
 
         socket.onmessage = (event) => {
             const response = JSON.parse(event.data);
-            console.log("Received response:", response); // Log every response
+            console.log("Received response:", response);
         
-            if (response.feedback) {
-                setFeedback(response.feedback);
+            if (response) {
+                setFeedback(response);
             }
         };        
 
