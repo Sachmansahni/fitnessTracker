@@ -43,7 +43,7 @@ function Home() {
         {/* Right Image */}
         <div className="mt-0 md:mt-0 flex justify-center">
           <img
-            src="Screenshot 2025-02-15 210035.png"
+            src="HitFit.png"
             alt="Hi Fit Logo"
             className="h-[60px] md:h-[125px] lg:h-[250px] xl:h-[500px] w-auto object-contain"
           />
