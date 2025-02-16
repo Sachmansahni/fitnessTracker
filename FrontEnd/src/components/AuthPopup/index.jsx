@@ -12,36 +12,42 @@ function AuthPopup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+  
     const baseUrl = "http://localhost:8000";
     const url = type === "signup" ? `${baseUrl}/register` : `${baseUrl}/token`;
   
     try {
+      const formDataToSend = new URLSearchParams();
+      formDataToSend.append("username", formData.email);
+      formDataToSend.append("password", formData.password);
+  
       const response = await fetch(url, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        headers: type === "signup" ? { "Content-Type": "application/json" } : { "Content-Type": "application/x-www-form-urlencoded" },
+        body: type === "signup" ? JSON.stringify(formData) : formDataToSend,
       });
   
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Something went wrong");
+        throw new Error(errorData.detail || "Something went wrong");
       }
   
       const result = await response.json();
-      
+  
       if (type !== "signup") {
         localStorage.setItem("token", result.access_token);
         localStorage.setItem("isUserLoggedIn", JSON.stringify(true));
         navigate("/");
+      } else {
+        alert(result.message);
+        setType("login"); // Switch to login after signup
       }
-  
-      alert(result.message);
     } catch (error) {
       console.error("Error submitting form:", error.message);
       alert(error.message);
     }
-  };  
+  };
+  
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -52,35 +58,37 @@ function AuthPopup() {
         >
           ✕
         </button>
-        <h2 className="text-2xl font-bold mb-4 text-center">{type === "signup" ? "Sign Up" : "Login"}</h2>
+        <h2 className="text-2xl font-bold mb-4 text-center">
+          {type === "signup" ? "Sign Up" : "Login"}
+        </h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
-          <input 
-            type="email" 
-            name="email" 
-            placeholder="Email" 
-            className="w-full p-2 border rounded" 
-            required 
-            value={formData.email} 
-            onChange={handleChange} 
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            className="w-full p-2 border rounded"
+            required
+            value={formData.email}
+            onChange={handleChange}
           />
-          <input 
-            type="password" 
-            name="password" 
-            placeholder="Password" 
-            className="w-full p-2 border rounded" 
-            required 
-            value={formData.password} 
-            onChange={handleChange} 
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            className="w-full p-2 border rounded"
+            required
+            value={formData.password}
+            onChange={handleChange}
           />
           {type === "signup" && (
-            <input 
-              type="text" 
-              name="username" 
-              placeholder="Username" 
-              className="w-full p-2 border rounded" 
-              required 
-              value={formData.username} 
-              onChange={handleChange} 
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              className="w-full p-2 border rounded"
+              required
+              value={formData.username}
+              onChange={handleChange}
             />
           )}
           <button type="submit" className="w-full bg-teal-500 text-white p-2 rounded hover:bg-teal-600">

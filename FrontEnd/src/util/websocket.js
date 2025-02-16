@@ -1,5 +1,5 @@
 export const createWebSocket = (setPlankStatus, setAngle, setTimeHeld) => {
-    const socket = new WebSocket("ws://localhost:8000");
+    const socket = new WebSocket("ws://localhost:8000/ws");
 
     socket.onmessage = (event) => {
         const feedback = JSON.parse(event.data);
