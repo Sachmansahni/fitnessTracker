@@ -20,7 +20,12 @@ function AuthPopup() {
         body: JSON.stringify(formData),
       });
       const result = await response.json();
-      console.log(result);
+      if (type !== "signup" && response.ok) {
+        localStorage.setItem("token", result.access_token);
+        localStorage.setItem("isUserLoggedIn", true);
+        navigate("/");
+      }
+      alert(result.message);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
