@@ -62,7 +62,7 @@ class PlankTracker:
             cv2.putText(img, f'Angle: {int(angle)}', (50, 150), cv2.FONT_HERSHEY_PLAIN, 3, color, 3)
 
         print(feedback)  # Now, this will execute
-        return img
+        return feedback
 
     # def run(self):
     #     cap = cv2.VideoCapture(0)
