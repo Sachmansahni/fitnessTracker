@@ -29,14 +29,13 @@ function PlankTracker() {
         };
 
         socket.onmessage = (event) => {
-            try {
-                const response = JSON.parse(event.data);
-                console.log("WebSocket Response:", response);
-                setFeedback(response);
-            } catch (error) {
-                console.error("Error parsing WebSocket message:", error);
+            const response = JSON.parse(event.data);
+            console.log("Received response:", response); // Log every response
+        
+            if (response.feedback) {
+                setFeedback(response.feedback);
             }
-        };
+        };        
 
         return () => {
             socket.close();
