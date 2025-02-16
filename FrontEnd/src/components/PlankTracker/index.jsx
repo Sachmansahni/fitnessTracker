@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { createWebSocket } from "../../utils/websocket";
+import { createWebSocket } from "../../util/websocket";
 
 const PlankTracker = () => {
     const videoRef = useRef(null);

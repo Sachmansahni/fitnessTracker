@@ -12,7 +12,7 @@ function AuthPopup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = type === "signup" ? "http://localhost:8000/signup" : "http://localhost:8000/login";
+    const url = type === "signup" ? "http://localhost:8000/register" : "http://localhost:8000/token";
     try {
       const response = await fetch(url, {
         method: "POST",
