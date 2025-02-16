@@ -12,24 +12,36 @@ function AuthPopup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = type === "signup" ? "http://localhost:8000/register" : "http://localhost:8000/token";
+    
+    const baseUrl = "http://localhost:8000";
+    const url = type === "signup" ? `${baseUrl}/register` : `${baseUrl}/token`;
+  
     try {
       const response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Something went wrong");
+      }
+  
       const result = await response.json();
-      if (type !== "signup" && response.ok) {
+      
+      if (type !== "signup") {
         localStorage.setItem("token", result.access_token);
-        localStorage.setItem("isUserLoggedIn", true);
+        localStorage.setItem("isUserLoggedIn", JSON.stringify(true));
         navigate("/");
       }
+  
       alert(result.message);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("Error submitting form:", error.message);
+      alert(error.message);
     }
-  };
+  };  
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
