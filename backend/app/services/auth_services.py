@@ -10,7 +10,6 @@ from app.services.schemas import Token
 from app.services.user_model import User
 
 
-
 router = APIRouter()
 
 MONGO_URL = "mongodb+srv://sachman:namhcas@cluster0.izbq8.mongodb.net/"
