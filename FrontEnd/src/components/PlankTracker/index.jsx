@@ -132,7 +132,7 @@ function PlankTracker() {
                     screenshotFormat="image/jpeg"
                     width="100%"
                     videoConstraints={{ facingMode: "user" }}
-                    className="w-full h-[500px] rounded-xl border-4 border-myPeach shadow-lg transition-all duration-300 hover:border-myTeal"
+                    className="w-full h-[700px] rounded-xl border-4 border-myPeach shadow-lg transition-all duration-300 hover:border-myTeal"
                 />
                 {feedback && (
                     <>
