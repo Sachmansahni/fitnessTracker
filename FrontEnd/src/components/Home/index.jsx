@@ -72,37 +72,75 @@ function Home() {
       )}
 
       {/* Slide 2 - Content from PPT */}
-      <div className="h-screen flex items-center justify-between bg-gray-900 text-white p-10">
+      <div className="h-screen flex items-center justify-between text-white p-10" style={{ backgroundColor: '#141414' }}>
         {/* Left Side Content */}
         <div className="flex flex-col w-1/2">
-          <h2 className="text-4xl font-bold">ABOUT OUR FIT FAMILY</h2>
-          <p className="text-lg mt-4">Astraeus was founded in 2001 by a husband and wife team, Bobby and Dora Graff. Since then, we have expanded to over 115 locations nationwide!</p>
-          <button className="mt-6 bg-blue-500 text-white py-2 px-4 rounded">Learn More</button>
+          <h2 className="text-4xl font-bold text-yellow-500">ABOUT OUR FIT FAMILY</h2>
+          <p className="text-lg mt-4 text-white">Astraeus was founded in 2001 by a husband and wife team, Bobby and Dora Graff. Since then, we have expanded to over 115 locations nationwide!</p>
+          <a href="#learn-more" className="mt-6 text-white underline">Learn More</a>
         </div>
 
         {/* Right Side Images */}
-        <div className="flex w-1/2 space-x-4">
-          <img src="image1.jpg" alt="Image 1" className="w-1/2 h-auto object-cover" />
-          <img src="image2.jpg" alt="Image 2" className="w-1/2 h-auto object-cover" />
+        <div className="relative w-1/2 h-full">
+          <img
+            src="About1.png"
+            alt="Image 1"
+            className="absolute top-10 left-10 w-1/2 h-auto object-cover transition-all duration-300 hover:scale-105 hover:z-10"
+          />
+          <img
+            src="About2.png"
+            alt="Image 2"
+            className="absolute bottom-10 right-10 w-1/2 h-auto object-cover transition-all duration-300 hover:scale-105 hover:z-10"
+          />
         </div>
       </div>
 
-
       {/* Slide 3 */}
-      <div className="h-screen flex flex-col items-center justify-center bg-gray-800 text-white p-10">
-        <h2 className="text-4xl font-bold">Slide 3 Title</h2>
-        <p className="text-lg mt-4 max-w-2xl text-center">This is where the content from the third slide of the PPT will go.</p>
+      <div className="h-screen flex flex-col items-center justify-center" style={{ backgroundColor: '#141414' }}>
+        <div className="flex flex-col items-center mb-10">
+          <h2 className="text-4xl font-bold text-yellow-500">WHAT WE OFFER</h2>
+          <p className="text-lg mt-4 text-white text-center">We're committed to bringing you the best workout experience.</p>
+        </div>
+
+        {/* Images with text */}
+        <div className="flex justify-between w-full mt-10">
+          <div className="relative w-1/3 h-64">
+            <img src="Offer1.png" alt="Image 1" className="w-full h-full object-cover" />
+            <p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-semibold text-center">
+              Perfect positioning
+            </p>
+          </div>
+          <div className="relative w-1/3 h-64">
+            <img src="Offer2.png" alt="Image 2" className="w-full h-full object-cover" />
+            <p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-semibold text-center">
+              Keep your body fit by daily challenges and scores
+            </p>
+          </div>
+          <div className="relative w-1/3 h-64">
+            <img src="Offer3.png" alt="Image 3" className="w-full h-full object-cover" />
+            <p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-semibold text-center">
+              Ask about Personal Training
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Slide 4 */}
-      <div className="h-screen flex flex-col items-center justify-center bg-gray-700 text-white p-10">
-        <h2 className="text-4xl font-bold">Slide 4 Title</h2>
-        <p className="text-lg mt-4 max-w-2xl text-center">More content from the PPT.</p>
+      <div
+        className="h-screen flex flex-col items-center justify-center text-white p-10"
+        style={{ backgroundImage: 'url("quote.png")', backgroundSize: 'cover', backgroundPosition: 'center' }}
+      >
+        <h2 className="text-4xl font-bold text-yellow-500">GET IN TOUCH TODAY</h2>
       </div>
 
-      {/* Additional slides can be added similarly */}
+      {/* Footer Section */}
+      <footer className="bg-yellow-500 text-white p-4 text-center">
+        <p className="text-lg">Email Address</p>
+        <p className="text-lg font-semibold">hiFit001@gmail.com</p>
+      </footer>
+
     </div>
   );
-}
+};
 
 export default Home;
