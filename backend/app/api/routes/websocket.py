@@ -3,11 +3,10 @@ import numpy as np
 import json
 import base64
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from app.services.plank_tracker import PlankTracker
+from app.services.exercise_tracker import ExerciseTracker
 
 router = APIRouter()
-plank_inst = PlankTracker()
-
+exercise_inst = ExerciseTracker()
 
 @router.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
@@ -18,21 +17,21 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             try:
                 # Receive the data from the client
-                data = await websocket.receive_text()  
+                data = await websocket.receive_text()
 
                 # Parse the incoming data (expecting a JSON object)
                 parsed_data = json.loads(data)
                 frame_data = base64.b64decode(parsed_data.get("frame"))  # Decode the base64 frame
 
                 # Convert the decoded byte data to a numpy array
-                np_arr = np.frombuffer(frame_data, np.uint8)  
-                img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)  
+                np_arr = np.frombuffer(frame_data, np.uint8)
+                img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
 
-                # Process the frame with the plank tracker (pose detection)
-                img, lmList = plank_inst.process_frame(img)
+                # Process the frame with pose detection
+                img, lmList = exercise_inst.process_frame(img)
 
-                # Get feedback on the plank posture
-                feedback = plank_inst.check_plank(img, lmList)
+                # Track all exercises and get feedback
+                feedback = exercise_inst.track_exercises(img, lmList)
 
                 # Send only the feedback data (without image)
                 await websocket.send_text(json.dumps(feedback))

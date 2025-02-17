@@ -7,16 +7,11 @@ from datetime import datetime, timedelta
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 from dotenv import load_dotenv
-from aiosmtplib import SMTP
+import aiosmtplib 
 from email.message import EmailMessage
 import random
 
 load_dotenv()
-
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587  # Change to 587 for TLS
-EMAIL_USERNAME = os.getenv("EMAIL_USERNAME")
-EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
 router = APIRouter()
 
@@ -43,6 +38,9 @@ class Token(BaseModel):
     token_type: str
     message: str
 
+class EmailSchema(BaseModel):
+    email:str
+
 def hash_password(password: str):
     return pwd_context.hash(password)
 
@@ -58,22 +56,28 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
-async def send_email(to_email: str, subject: str, body: str):
-    msg = EmailMessage()
-    msg["From"] = EMAIL_USERNAME
-    msg["To"] = to_email
-    msg["Subject"] = subject
-    msg.set_content(body)
 
+async def send_email_otp(email: str, otp: str):
+    """ Sends an OTP email to the user """
+    
     try:
-        async with SMTP(hostname=EMAIL_HOST, port=EMAIL_PORT, timeout=30) as smtp:
-            await smtp.connect()
-            await smtp.starttls()
-            await smtp.login(EMAIL_USERNAME, EMAIL_PASSWORD)
-            await smtp.send_message(msg)
-        return {"message": "Email sent successfully!"}
+        message = EmailMessage()
+        message["From"] = "raunaksahni71@gmail.com" #os.getenv("EMAIL_ADDRESS")
+        message["To"] = email
+        message["Subject"] = "Your OTP for Password Reset"
+        message.set_content(f"Your OTP for password reset is: {otp}. This OTP is valid for 5 minutes.")
+
+        smtp = aiosmtplib.SMTP(hostname="smtp.gmail.com", port=587)
+
+        await smtp.connect()
+        # await smtp.starttls()
+        await smtp.login(("raunaksahni71@gmail.com"),("cagkosdjupqhvorz"))
+        await smtp.send_message(message)
+        await smtp.quit()
+
     except Exception as e:
-        return {"error": str(e)}
+        raise HTTPException(status_code=500, detail=f"Failed to send email: {str(e)}")
+
 
 @router.post("/register")
 async def register(user: User):
@@ -93,7 +97,7 @@ async def register(user: User):
 
 @router.post("/token", response_model=Token)
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = await users_collection.find_one({"email": form_data.username})  # `username` is actually the email field
+    user = await users_collection.find_one({"email": form_data.username})  # username is actually the email field
     if not user or not verify_password(form_data.password, user["password"]):
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
@@ -104,3 +108,23 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 @router.get("/protected")
 async def protected_route(user: dict = Depends(oauth2_scheme)):
     return {"message": f"Welcome, {user}!"}
+
+
+
+@router.post("/send-otp")
+async def send_otp(request : EmailSchema):
+    user= await users_collection.find_one({"email":request.email})
+
+    if not user:
+        raise HTTPException(status_code=404,detail="email not registered")
+    
+    # Generate a random 6-digit OTP
+    otp = str(generate_otp())
+    
+    # Store OTP temporarily in the database (expires in 5 minutes)
+    await users_collection.update_one({"email": request.email}, {"$set": {"otp": otp, "otp_expiry": datetime.utcnow() + timedelta(minutes=5)}})
+
+    # Send OTP to the user via email
+    await send_email_otp(request.email, otp)
+
+    return {"message": "OTP sent successfully. Check your email."}
