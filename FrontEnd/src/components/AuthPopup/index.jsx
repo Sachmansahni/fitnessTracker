@@ -96,6 +96,11 @@ function AuthPopup() {
           </button>
         </form>
         <p className="text-center mt-4">
+          <button className="text-teal-500 underline" onClick={() => navigate("/forgot-password")}>
+            {type === "login" ? "Forgot Password?" : ""}
+          </button>
+        </p>
+        <p className="text-center mt-4">
           {type === "signup" ? "Already have an account? " : "Don't have an account? "}
           <button className="text-teal-500 underline" onClick={() => setType(type === "signup" ? "login" : "signup")}>
             {type === "signup" ? "Login" : "Sign Up"}
