@@ -91,7 +91,7 @@ function SquatTracker() {
                 {feedback && (
                     <div className="mt-6 p-4 bg-gray-100 rounded-lg shadow-md w-full text-center">
                         <p className="text-lg text-gray-800 font-semibold">
-                            <strong>Squat Count:</strong> {feedback.count}
+                            <strong>Squat Count:</strong> {feedback.squat_reps}
                         </p>
                         <p className="text-lg text-gray-800 font-semibold">
                             <strong>Depth Accuracy:</strong>{" "}
@@ -100,7 +100,10 @@ function SquatTracker() {
                             </span>
                         </p>
                         <p className="text-lg text-gray-800 font-semibold">
-                            <strong>Posture Feedback:</strong> {feedback.posture}
+                            <strong>Posture Feedback:</strong>{" "}
+                            <span className={feedback.posture === "Good posture" ? "text-green-600" : "text-red-600"}>
+                                {feedback.posture}
+                            </span>
                         </p>
                         <p className="text-lg text-gray-800 font-semibold">
                             <strong>Message:</strong> {feedback.message}

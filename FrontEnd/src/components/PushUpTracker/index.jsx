@@ -91,13 +91,13 @@ function PushupTracker() {
                 {feedback && (
                     <div className="mt-6 p-4 bg-gray-100 rounded-lg shadow-md w-full text-center">
                         <p className="text-lg text-gray-800 font-semibold">
-                            <strong>Push-up Count:</strong> {feedback.pushup_count}
+                            <strong>Push-up Count:</strong> {feedback.pushup_reps}
                         </p>
                         <p className="text-lg text-gray-800 font-semibold">
                             <strong>Form Accuracy:</strong> {feedback.accuracy}%
                         </p>
                         <p className="text-lg text-gray-800 font-semibold">
-                            <strong>Message:</strong> {feedback.message}
+                            <strong>Message:</strong> {feedback.pushup_message}
                         </p>
                     </div>
                 )}
