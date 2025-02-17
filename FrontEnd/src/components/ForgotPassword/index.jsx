@@ -38,12 +38,12 @@ const ForgotPassword = () => {
             <div className="absolute inset-0 bg-cover bg-center filter blur-md" style={{ backgroundImage: "url('Home.png')" }}></div>
             <div className="bg-black bg-opacity-60 p-6 rounded-lg shadow-lg w-96 relative">
                 <button
-                    className="absolute top-2 right-2 bg-[#FFD700] text-black rounded-full px-3 py-1"
+                    className="absolute top-2 right-2 bg-[#FFF700] text-black rounded-full px-3 py-1"
                     onClick={() => navigate("/auth")}
                 >
                     ✕
                 </button>
-                <h2 className="text-2xl font-bold mb-4 text-center text-[#FFD700]">Forgot Password</h2>
+                <h2 className="text-2xl font-bold mb-4 text-center text-[#FFF700]">Forgot Password</h2>
                 <p className="text-gray-600 mb-6 text-center">Enter your email to receive an OTP for password reset.</p>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <input
@@ -52,11 +52,11 @@ const ForgotPassword = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        className="w-full p-2 border border-[#FFD700] rounded-lg focus:ring-2 focus:ring-[#FFD700] focus:outline-none"
+                        className="w-full p-2 border border-[#FFF700] rounded-lg focus:ring-2 focus:ring-[#FFF700] focus:outline-none"
                     />
                     <button
                         type="submit"
-                        className="w-full bg-[#FFD700] text-black p-2 rounded-lg hover:bg-[#FFB800] transition duration-300"
+                        className="w-full bg-[#FFF700] text-black p-2 rounded-lg transition duration-300"
                     >
                         Send OTP
                     </button>
@@ -99,7 +99,7 @@ const OTPVerification = ({ email }) => {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-opacity-0 z-50 bg-cover bg-center" style={{ backgroundImage: "url('Home.png')" }}>
             <div className="bg-black bg-opacity-60 p-6 rounded-lg shadow-lg w-96 relative">
-                <h2 className="text-2xl font-bold mb-4 text-center text-[#FFD700]">Verify OTP</h2>
+                <h2 className="text-2xl font-bold mb-4 text-center text-[#FFF700]">Verify OTP</h2>
                 <p className="text-gray-600 mb-6 text-center">Enter the OTP sent to your email along with your new password.</p>
                 <form onSubmit={handleReset} className="space-y-4">
                     <input
@@ -108,7 +108,7 @@ const OTPVerification = ({ email }) => {
                         value={otp}
                         onChange={(e) => setOtp(e.target.value)}
                         required
-                        className="w-full p-2 border border-[#FFD700] rounded-lg focus:ring-2 focus:ring-[#FFD700] focus:outline-none"
+                        className="w-full p-2 border border-[#FFF700] rounded-lg focus:ring-2 focus:ring-[#FFF700] focus:outline-none"
                     />
                     <input
                         type="password"
@@ -116,7 +116,7 @@ const OTPVerification = ({ email }) => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        className="w-full p-2 border border-[#FFD700] rounded-lg focus:ring-2 focus:ring-[#FFD700] focus:outline-none"
+                        className="w-full p-2 border border-[#FFF700] rounded-lg focus:ring-2 focus:ring-[#FFF700] focus:outline-none"
                     />
                     <input
                         type="password"
@@ -124,11 +124,11 @@ const OTPVerification = ({ email }) => {
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         required
-                        className="w-full p-2 border border-[#FFD700] rounded-lg focus:ring-2 focus:ring-[#FFD700] focus:outline-none"
+                        className="w-full p-2 border border-[#FFF700] rounded-lg focus:ring-2 focus:ring-[#FFF700] focus:outline-none"
                     />
                     <button
                         type="submit"
-                        className="w-full bg-[#FFD700] text-black p-2 rounded-lg hover:bg-[#FFB800] transition duration-300"
+                        className="w-full bg-[#FFF700] text-black p-2 rounded-lg transition duration-300"
                     >
                         Reset Password
                     </button>

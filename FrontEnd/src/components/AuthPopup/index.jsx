@@ -55,11 +55,11 @@ function AuthPopup() {
       <div className="bg-black bg-opacity-60 p-6 rounded-lg shadow-lg w-96 relative">
         <button
           onClick={() => navigate("/")}
-          className="absolute top-2 right-2 bg-[#FFD700] text-black rounded-full px-3 py-1"
+          className="absolute top-2 right-2 bg-[#FFF700] text-black rounded-full px-3 py-1"
         >
           ✕
         </button>
-        <h2 className="text-2xl font-bold mb-6 text-center text-[#FFD700]">
+        <h2 className="text-2xl font-bold mb-6 text-center text-[#FFF700]">
           {type === "signup" ? "Create an Account" : "Welcome Back"}
         </h2>
         <form className="space-y-6" onSubmit={handleSubmit}>
@@ -67,7 +67,7 @@ function AuthPopup() {
             type="email"
             name="email"
             placeholder="Email"
-            className="w-full p-3 border border-[#FFD700] rounded-lg focus:ring-2 focus:ring-[#FFD700] focus:outline-none"
+            className="w-full p-3 border border-[#FFF700] rounded-lg focus:ring-2 focus:ring-[#FFF700] focus:outline-none"
             required
             value={formData.email}
             onChange={handleChange}
@@ -76,7 +76,7 @@ function AuthPopup() {
             type="password"
             name="password"
             placeholder="Password"
-            className="w-full p-3 border border-[#FFD700] rounded-lg focus:ring-2 focus:ring-[#FFD700] focus:outline-none"
+            className="w-full p-3 border border-[#FFF700] rounded-lg focus:ring-2 focus:ring-[#FFF700] focus:outline-none"
             required
             value={formData.password}
             onChange={handleChange}
@@ -86,7 +86,7 @@ function AuthPopup() {
               type="text"
               name="username"
               placeholder="Username"
-              className="w-full p-3 border border-[#FFD700] rounded-lg focus:ring-2 focus:ring-[#FFD700] focus:outline-none"
+              className="w-full p-3 border border-[#FFF700] rounded-lg focus:ring-2 focus:ring-[#FFF700] focus:outline-none"
               required
               value={formData.username}
               onChange={handleChange}
@@ -94,7 +94,7 @@ function AuthPopup() {
           )}
           <button
             type="submit"
-            className="w-full bg-[#FFD700] text-black p-3 rounded-lg hover:bg-[#FFB800] transition duration-300"
+            className="w-full bg-[#FFF700] text-black p-3 rounded-lg transition duration-300"
           >
             {type === "signup" ? "Sign Up" : "Login"}
           </button>
@@ -103,7 +103,7 @@ function AuthPopup() {
           {type === "login" && (
             <p>
               <button
-                className="text-[#FFD700] hover:underline"
+                className="text-[#FFF700] hover:underline"
                 onClick={() => navigate("/forgot-password")}
               >
                 Forgot Password?
@@ -115,7 +115,7 @@ function AuthPopup() {
               ? "Already have an account?"
               : "Don't have an account?"}
             <button
-              className="text-[#FFD700] hover:underline ml-2"
+              className="text-[#FFF700] hover:underline ml-2"
               onClick={() => setType(type === "signup" ? "login" : "signup")}
             >
               {type === "signup" ? "Login" : "Sign Up"}

@@ -1,64 +1,73 @@
 import React, { useEffect, useRef, useState } from "react";
-import { createWebSocket } from "../../util/websocket";
+import Webcam from "react-webcam";
+
+const WEBSOCKET_URL = "ws://localhost:8000/ws/workout";
 
 const WorkoutTracker = () => {
-    const videoRef = useRef(null);
-    const youtubeRef = useRef(null);
-    const canvasRef = useRef(null);
-    const socketRef = useRef(null);
     const [status, setStatus] = useState("Not Detected");
     const [exerciseTime, setExerciseTime] = useState(0);
+    const socketRef = useRef(null);
+
+    const webcamRef = useRef(null);
 
     useEffect(() => {
-        socketRef.current = createWebSocket(setStatus, setExerciseTime);
+        // Create WebSocket connection
+        socketRef.current = new WebSocket(WEBSOCKET_URL);
 
-        navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-            if (videoRef.current) {
-                videoRef.current.srcObject = stream;
-            }
-        });
+        // Handle WebSocket open event
+        socketRef.current.onopen = () => {
+            console.log("WebSocket connection established.");
+        };
+
+        // Handle WebSocket message event
+        socketRef.current.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.status) setStatus(data.status);
+            if (data.exerciseTime) setExerciseTime(data.exerciseTime);
+        };
+
+        // Handle WebSocket close event
+        socketRef.current.onclose = () => {
+            console.log("WebSocket connection closed.");
+        };
+
+        // Handle WebSocket error event
+        socketRef.current.onerror = (error) => {
+            console.error("WebSocket error: ", error);
+        };
 
         const sendFrames = () => {
-            if (!videoRef.current || !canvasRef.current) return;
-            const canvas = canvasRef.current;
-            const context = canvas.getContext("2d");
-            canvas.width = videoRef.current.videoWidth;
-            canvas.height = videoRef.current.videoHeight;
-            context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+            if (!webcamRef.current) return;
+            const imageSrc = webcamRef.current.getScreenshot(); // Capture a frame
 
-            canvas.toBlob((blob) => {
-                if (blob && socketRef.current) {
-                    const reader = new FileReader();
-                    reader.readAsDataURL(blob);
-                    reader.onloadend = () => {
-                        const base64data = reader.result.split(",")[1];
-                        socketRef.current.send(JSON.stringify({ frame: base64data }));
-                    };
-                }
-            }, "image/jpeg");
+            if (imageSrc && socketRef.current.readyState === WebSocket.OPEN) {
+                const base64data = imageSrc.split(",")[1];
+                socketRef.current.send(JSON.stringify({ frame: base64data }));
+            }
         };
 
         const frameInterval = setInterval(sendFrames, 100);
 
         return () => {
             clearInterval(frameInterval);
-            socketRef.current?.close();
-            if (videoRef.current?.srcObject) {
-                videoRef.current.srcObject.getTracks().forEach(track => track.stop());
-            }
+            socketRef.current?.close(); // Close WebSocket connection when the component unmounts
         };
     }, []);
 
     return (
         <div className="flex justify-center items-center h-screen p-5 bg-black">
             <div className="flex gap-6 w-full rounded-2xl shadow-2xl border border-white/40">
-                {/* Left Side: Video Feed */}
+                {/* Left Side: Webcam Feed */}
                 <div className="flex-1 text-center">
                     <h2 className="mb-4 text-2xl font-bold text-[#FFD700] tracking-wide">Workout Tracker</h2>
-                    <video
-                        ref={videoRef}
-                        autoPlay
-                        playsInline
+                    <Webcam
+                        ref={webcamRef}
+                        audio={false}
+                        screenshotFormat="image/jpeg"
+                        width="100%"
+                        videoConstraints={{
+                            facingMode: "user",
+                        }}
                         className="w-full h-[700px] rounded-xl border-4 border-[#FFD700] shadow-lg transition-all duration-300 hover:border-white"
                     />
                 </div>
@@ -67,7 +76,6 @@ const WorkoutTracker = () => {
                 <div className="flex-1 text-center">
                     <h2 className="mb-4 text-2xl font-bold text-[#FFD700] tracking-wide">Follow Along</h2>
                     <iframe
-                        ref={youtubeRef}
                         width="100%"
                         height="700"
                         src="https://www.youtube.com/embed/LJwupStv_jE"
@@ -79,7 +87,6 @@ const WorkoutTracker = () => {
                     />
                 </div>
             </div>
-            <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
         </div>
     );
 };
