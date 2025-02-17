@@ -12,28 +12,28 @@ function AuthPopup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const baseUrl = "http://localhost:8000";
     const url = type === "signup" ? `${baseUrl}/register` : `${baseUrl}/token`;
-  
+
     try {
       const formDataToSend = new URLSearchParams();
       formDataToSend.append("username", formData.email);
       formDataToSend.append("password", formData.password);
-  
+
       const response = await fetch(url, {
         method: "POST",
         headers: type === "signup" ? { "Content-Type": "application/json" } : { "Content-Type": "application/x-www-form-urlencoded" },
         body: type === "signup" ? JSON.stringify(formData) : formDataToSend,
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.detail || "Something went wrong");
       }
-  
+
       const result = await response.json();
-  
+
       if (type !== "signup") {
         localStorage.setItem("token", result.access_token);
         localStorage.setItem("isUserLoggedIn", JSON.stringify(true));
@@ -47,7 +47,7 @@ function AuthPopup() {
       alert(error.message);
     }
   };
-  
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
