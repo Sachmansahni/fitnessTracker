@@ -8,7 +8,7 @@ function PlankTracker() {
         plank: false,
         angle: 0,
         time_held: 0,
-        message: "",
+        plank_message: "",
     });
     const [isConnected, setIsConnected] = useState(false);
     const websocketRef = useRef(null);
@@ -71,7 +71,8 @@ function PlankTracker() {
         };
     }, [isConnected]);
 
-    const { angle, plank } = feedback;
+    // Destructure the feedback state and provide default values for missing properties
+    const { angle = 0, plank = false, time_held = 0, plank_message = "" } = feedback;
 
     // Convert angle to stroke offset (360 degrees = 2 * π radians)
     const circumference = 2 * Math.PI * 50; // 50 is the radius of the circle
@@ -145,11 +146,11 @@ function PlankTracker() {
 
                 <p>
                     <span className="text-[25px] text-[#FFD700] font-semibold">Time Held: </span>
-                    <span className="text-[50px] text-[#FFFFFF] font-semibold"> {feedback?.time_held} sec</span>
+                    <span className="text-[50px] text-[#FFFFFF] font-semibold"> {time_held} sec</span>
                 </p>
                 <p>
                     <span className="text-[25px] text-[#FFD700] font-semibold">Message: </span>
-                    <span className="text-[50px] text-[#FFFFFF] font-semibold"> {feedback?.message}</span>
+                    <span className="text-[50px] text-[#FFFFFF] font-semibold"> {plank_message}</span>
                 </p>
             </div>
         </div>
