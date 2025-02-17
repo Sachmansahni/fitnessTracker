@@ -72,39 +72,71 @@ class ExerciseTracker:
     def track_squat(self, lmList):
         """Count squat repetitions."""
         if len(lmList) < 27:
-            return {"squat_reps": self.rep_count["squat"]}
+            return {"squat_reps": self.rep_count["squat"], "message": "Landmarks missing", "correct_squat": False}
 
-        knee, hip, ankle = lmList[26], lmList[24], lmList[28]
+        shoulder,hip,knee,ankle=lmList[12],lmList[24],lmList[26],lmList[28]
+        
         squat_angle = self.find_angle(hip, knee, ankle)
+        torso_angle = self.find_angle(shoulder,hip,knee)
 
-        if squat_angle < 90:  # Detect squat down
+        print(f"Squat Angle:{squat_angle},Torso Angle:{torso_angle}")
+
+        if torso_angle>95:
+            posture="Lean forward slightly"
+        elif torso_angle<65:
+            posture="Too much forward lean"
+        else : 
+            posture="Good postures"
+
+        if squat_angle < 85:  # Detect squat down
             self.exercise_state["squat"] = True
         elif self.exercise_state["squat"] and squat_angle > 150:  # Detect standing up
             self.rep_count["squat"] += 1
             self.exercise_state["squat"] = False
 
-        if self.rep_count["squat"]<5:
-            return {"squat_reps":self.rep_count["squat"],"message":"Keep going! squats in progress"}
-        elif self.rep_count["squat"]%5==0:
-            return {"squat_reps":self.rep_count["squat"],"message":f"Great job! you have completed {self.rep_count['squat']} squats!"}
+        if self.rep_count["squat"] < 5:
+            message = "Keep going! Squats in progress 💪"
+        elif self.rep_count["squat"] % 5 == 0:
+            message = f"🔥 Great job! {self.rep_count['squat']} squats done!"
 
-        return {"squat_reps": self.rep_count["squat"]}
+        return {
+            "squat_reps": self.rep_count["squat"],
+            "message": message,
+            "correct_squat": squat_angle < 90,
+            "posture": posture  # Added posture feedback
+        }
 
     def track_pushup(self, lmList):
-        """Count push-up repetitions."""
-        if len(lmList) < 17:
-            return {"pushup_reps": self.rep_count["pushup"]}
+        """Accurately count push-up reps by ensuring correct posture and movement."""
+        if len(lmList) < 29:  # Ensure we have all keypoints
+            return {"pushup_reps": self.rep_count["pushup"], "pushup_message": "Not enough landmarks detected"}
 
+        # Upper body keypoints
         shoulder, elbow, wrist = lmList[12], lmList[14], lmList[16]
-        pushup_angle = self.find_angle(shoulder, elbow, wrist)
+    
+        # Lower body keypoints
+        hip, knee, ankle = lmList[24], lmList[26], lmList[28] 
 
-        if pushup_angle < 45:  # Detect push-up down
+        #   Calculate angles
+        pushup_angle = self.find_angle(shoulder, elbow, wrist)  # Arm movement
+        body_angle = self.find_angle(shoulder, hip, ankle)  # Ensure body is straight
+
+        # Debugging output (print angles for testing)
+        print(f"Push-up angle: {pushup_angle}, Body angle: {body_angle}")
+
+        # Ensure the body is in a push-up position before counting
+        if body_angle < 160:  
+            return {"pushup_reps": self.rep_count["pushup"], "pushup_message": "Keep your body straight"}
+
+        # Detect push-up movement
+        if pushup_angle < 45:  # Going down
             self.exercise_state["pushup"] = True
-        elif self.exercise_state["pushup"] and pushup_angle > 160:  # Detect push-up up
+        elif self.exercise_state["pushup"] and pushup_angle > 160:  # Coming up (count rep)
             self.rep_count["pushup"] += 1
-            self.exercise_state["pushup"] = False
+            self.exercise_state["pushup"] = False  # Reset for next rep
 
-        return {"pushup_reps": self.rep_count["pushup"]}
+        return {"pushup_reps": self.rep_count["pushup"], "pushup_message": "Good form! Keep going"}
+
 
     def track_jumping_jack(self, lmList):
         """Count jumping jack repetitions."""
