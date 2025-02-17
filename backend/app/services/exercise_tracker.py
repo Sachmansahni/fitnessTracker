@@ -56,14 +56,14 @@ class ExerciseTracker:
                 self.start_time = time.time()
             self.holding_time = int(time.time() - self.start_time)
 
-            message ="Try more"
+            plank_message ="Keep trying"
             if self.holding_time<10:
-                return {"plank": bool(True), "time_held": self.holding_time, "angle": int(angle), "message": "Keep going! Hold for a little longer"}
+                return {"plank": bool(True), "time_held": self.holding_time, "angle": int(angle), "plank_message": "Keep going! Hold for a little longer"}
             elif self.holding_time>30:
-                return {"plank": bool(True), "time_held": self.holding_time, "angle": int(angle), "message": "Great job! You're holding strong!"}
+                return {"plank": bool(True), "time_held": self.holding_time, "angle": int(angle), "plank_message": "Great job! You're holding strong!"}
             elif self.holding_time%10==0:
-                return {"plank": bool(True), "time_held": self.holding_time, "angle": int(angle), "message": f"You've held the plank for {self.holding_time} seconds!"}
-            return {"plank": bool(True), "time_held": self.holding_time, "angle": int(angle), "message": "Try more"}
+                return {"plank": bool(True), "time_held": self.holding_time, "angle": int(angle), "plank_message": f"You've held the plank for {self.holding_time} seconds!"}
+            return {"plank": bool(True), "time_held": self.holding_time, "angle": int(angle), "plank_message": "Try more"}
         else:
             self.start_time = None
             self.holding_time = 0
@@ -73,7 +73,7 @@ class ExerciseTracker:
     def track_squat(self, lmList):
         """Count squat repetitions."""
         if len(lmList) < 27:
-            return {"squat_reps": self.rep_count["squat"], "message": "Landmarks missing", "correct_squat": False}
+            return {"squat_reps": self.rep_count["squat"], "squat_message": "Landmarks missing", "correct_squat": False}
 
         shoulder,hip,knee,ankle=lmList[12],lmList[24],lmList[26],lmList[28]
         
@@ -97,15 +97,15 @@ class ExerciseTracker:
             self.rep_count["squat"] += 1
             self.exercise_state["squat"] = "False"
 
-        message="don't loosen your body"
+        squat_message="don't loosen your body"
         if self.rep_count["squat"] < 5:
-            message = "Keep going! Squats in progress 💪"
+            squat_message = "Keep going! Squats in progress 💪"
         elif self.rep_count["squat"] % 5 == 0:
-            message = f"🔥 Great job! {self.rep_count['squat']} squats done!"
+            squat_message = f"🔥 Great job! {self.rep_count['squat']} squats done!"
 
         return {
             "squat_reps": self.rep_count["squat"],
-            "message": message,
+            "squat_message": message,
             "correct_squat": bool(squat_angle < 90),
             "posture": posture  # Added posture feedback
         }
