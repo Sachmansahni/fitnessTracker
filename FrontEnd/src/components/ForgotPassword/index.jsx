@@ -10,7 +10,7 @@ const ForgotPassword = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage("Processing...");
-        
+
         try {
             const response = await fetch("/api/send-otp", {
                 method: "POST",
@@ -19,7 +19,7 @@ const ForgotPassword = () => {
                 },
                 body: JSON.stringify({ email }),
             });
-            
+
             const data = await response.json();
             setMessage(data.message || "OTP has been sent to your email.");
             setTimeout(() => setOtpPopup(true), 1000); // Show OTP popup after success
@@ -33,28 +33,30 @@ const ForgotPassword = () => {
     }
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
+        <div className="fixed inset-0 flex items-center justify-center bg-opacity-0 z-50 bg-cover bg-center" style={{ backgroundImage: "url('Home.png')" }}>
+            <div className="absolute inset-0 bg-black opacity-50"></div>
+            <div className="absolute inset-0 bg-cover bg-center filter blur-md" style={{ backgroundImage: "url('Home.png')" }}></div>
+            <div className="bg-black bg-opacity-60 p-6 rounded-lg shadow-lg w-96 relative">
                 <button
-                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full px-3 py-1"
+                    className="absolute top-2 right-2 bg-[#FFD700] text-black rounded-full px-3 py-1"
                     onClick={() => navigate("/auth")}
                 >
                     ✕
                 </button>
-                <h2 className="text-2xl font-bold mb-4 text-center">Forgot Password</h2>
+                <h2 className="text-2xl font-bold mb-4 text-center text-[#FFD700]">Forgot Password</h2>
                 <p className="text-gray-600 mb-6 text-center">Enter your email to receive an OTP for password reset.</p>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <input 
-                        type="email" 
-                        placeholder="Enter your email" 
-                        value={email} 
-                        onChange={(e) => setEmail(e.target.value)} 
+                    <input
+                        type="email"
+                        placeholder="Enter your email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         required
-                        className="w-full p-2 border rounded"
+                        className="w-full p-2 border border-[#FFD700] rounded-lg focus:ring-2 focus:ring-[#FFD700] focus:outline-none"
                     />
-                    <button 
-                        type="submit" 
-                        className="w-full bg-teal-500 text-white p-2 rounded hover:bg-teal-600"
+                    <button
+                        type="submit"
+                        className="w-full bg-[#FFD700] text-black p-2 rounded-lg hover:bg-[#FFB800] transition duration-300"
                     >
                         Send OTP
                     </button>
@@ -86,7 +88,7 @@ const OTPVerification = ({ email }) => {
                 },
                 body: JSON.stringify({ email, otp, newPassword }),
             });
-            
+
             const data = await response.json();
             setMessage(data.message || "Password successfully reset.");
         } catch (error) {
@@ -95,38 +97,38 @@ const OTPVerification = ({ email }) => {
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
-                <h2 className="text-2xl font-bold mb-4 text-center">Verify OTP</h2>
+        <div className="fixed inset-0 flex items-center justify-center bg-opacity-0 z-50 bg-cover bg-center" style={{ backgroundImage: "url('Home.png')" }}>
+            <div className="bg-black bg-opacity-60 p-6 rounded-lg shadow-lg w-96 relative">
+                <h2 className="text-2xl font-bold mb-4 text-center text-[#FFD700]">Verify OTP</h2>
                 <p className="text-gray-600 mb-6 text-center">Enter the OTP sent to your email along with your new password.</p>
                 <form onSubmit={handleReset} className="space-y-4">
-                    <input 
-                        type="text" 
-                        placeholder="Enter OTP" 
-                        value={otp} 
-                        onChange={(e) => setOtp(e.target.value)} 
+                    <input
+                        type="text"
+                        placeholder="Enter OTP"
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value)}
                         required
-                        className="w-full p-2 border rounded"
+                        className="w-full p-2 border border-[#FFD700] rounded-lg focus:ring-2 focus:ring-[#FFD700] focus:outline-none"
                     />
-                    <input 
-                        type="password" 
-                        placeholder="New Password" 
-                        value={newPassword} 
-                        onChange={(e) => setNewPassword(e.target.value)} 
+                    <input
+                        type="password"
+                        placeholder="New Password"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
                         required
-                        className="w-full p-2 border rounded"
+                        className="w-full p-2 border border-[#FFD700] rounded-lg focus:ring-2 focus:ring-[#FFD700] focus:outline-none"
                     />
-                    <input 
-                        type="password" 
-                        placeholder="Confirm Password" 
-                        value={confirmPassword} 
-                        onChange={(e) => setConfirmPassword(e.target.value)} 
+                    <input
+                        type="password"
+                        placeholder="Confirm Password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
                         required
-                        className="w-full p-2 border rounded"
+                        className="w-full p-2 border border-[#FFD700] rounded-lg focus:ring-2 focus:ring-[#FFD700] focus:outline-none"
                     />
-                    <button 
-                        type="submit" 
-                        className="w-full bg-teal-500 text-white p-2 rounded hover:bg-teal-600"
+                    <button
+                        type="submit"
+                        className="w-full bg-[#FFD700] text-black p-2 rounded-lg hover:bg-[#FFB800] transition duration-300"
                     >
                         Reset Password
                     </button>

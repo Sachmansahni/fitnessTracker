@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,42 +12,47 @@ function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-myTeal relative overflow-hidden">
-      {/* Curved Background */}
-      <div className="absolute top-0 right-0 w-3/4 h-full bg-white" style={{ clipPath: "ellipse(80% 70% at 100% 50%)" }}></div>
+    <div className="flex flex-col scroll-smooth">
+      {/* Slide 1 - Existing Home Page */}
+      <div className="h-screen flex flex-col relative overflow-hidden text-white bg-center bg-no-repeat bg-cover" 
+        style={{ backgroundImage: "url('Home.png')" }}>
+        
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
 
-      {/* Content Section */}
-      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between p-10 min-h-screen">
-        {/* Left Content */}
-        <div className="text-left max-w-md text-gray-800">
-          <div className="mt-4 space-y-2">
-            <h1 className="text-7xl font-bold mb-4">Welcome to Fitness Tracker</h1>
-            {isUserLoggedIn ? (
-              <div className="space-y-4">
-                <Link to="/plank-tracker" className="bg-blue-900 text-white px-6 py-2 rounded-lg shadow-md block text-center">Plank Tracker</Link>
-                <Link to="/pushup-tracker" className="bg-blue-700 text-white px-6 py-2 rounded-lg shadow-md block text-center">Push-up Tracker</Link>
-                <Link to="/squat-tracker" className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow-md block text-center">Squat Tracker</Link>
-                <Link to="/workout-tracker" className="bg-blue-300 text-white px-6 py-2 rounded-lg shadow-md block text-center">Workout Tracker</Link>
-              </div>
-            ) : (
-              <>
-                <p className="text-xl max-w-2xl mb-6">Track your workouts, monitor your progress, and stay fit with our advanced fitness tracking system.</p>
-                <div className="mt-6 space-x-4">
-                  <Link to="/auth" className="bg-blue-900 text-white px-6 py-2 rounded-lg shadow-md">Get Started</Link>
-                  <button onClick={() => setIsOpen(true)} className="bg-myPeach text-white px-6 py-2 rounded-lg shadow-md">Demo Video</button>
-                </div>
-              </>
-            )}
+        {/* Header with Logo */}
+        <div className="absolute top-0 left-0 right-0 flex items-center justify-between p-6 z-10">
+          <div className="flex items-center">
+            <img src="Logo.png" alt="Hi-Fit Logo" className="h-12 w-auto mr-4" />
+            <h1 className="text-3xl font-bold text-yellow-500">Hi-Fit</h1>
           </div>
         </div>
 
-        {/* Right Image */}
-        <div className="mt-0 md:mt-0 flex justify-center">
-          <img
-            src="HitFit.png"
-            alt="Hi Fit Logo"
-            className="h-[60px] md:h-[125px] lg:h-[250px] xl:h-[500px] w-auto object-contain"
-          />
+        {/* Main Content */}
+        <div className="relative z-10 flex flex-col items-center justify-center p-10 min-h-screen">
+          <motion.div
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center max-w-md"
+          >
+            <h1 className="text-6xl font-bold mb-6 uppercase">Track Your Fitness</h1>
+            <p className="text-lg max-w-2xl mb-6">Stay on top of your fitness goals with our advanced tracking system.</p>
+            
+            {isUserLoggedIn ? (
+              <div className="space-y-4">
+                <Link to="/plank-tracker" className="bg-yellow-500 text-black px-6 py-2 rounded-lg shadow-md block text-center font-bold">Plank Tracker</Link>
+                <Link to="/pushup-tracker" className="bg-yellow-400 text-black px-6 py-2 rounded-lg shadow-md block text-center font-bold">Push-up Tracker</Link>
+                <Link to="/squat-tracker" className="bg-yellow-300 text-black px-6 py-2 rounded-lg shadow-md block text-center font-bold">Squat Tracker</Link>
+                <Link to="/workout-tracker" className="bg-yellow-200 text-black px-6 py-2 rounded-lg shadow-md block text-center font-bold">Workout Tracker</Link>
+              </div>
+            ) : (
+              <div className="flex space-x-4 justify-center">
+                <Link to="/auth" className="bg-yellow-500 text-black px-6 py-2 rounded-lg shadow-md font-bold">Get Started</Link>
+                <button onClick={() => setIsOpen(true)} className="bg-white text-black px-6 py-2 rounded-lg shadow-md font-bold">Demo Video</button>
+              </div>
+            )}
+          </motion.div>
         </div>
       </div>
 
@@ -54,12 +60,7 @@ function Home() {
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-4 rounded-lg shadow-lg max-w-2xl w-full relative">
-            <button
-              onClick={() => setIsOpen(false)}
-              className="absolute top-2 right-2 bg-myPeach text-white rounded-full px-3 py-1 text-lg"
-            >
-              ✕
-            </button>
+            <button onClick={() => setIsOpen(false)} className="absolute top-2 right-2 bg-yellow-500 text-black rounded-full px-3 py-1 text-lg">✕</button>
             <div className="relative w-full">
               <video className="w-full h-64 md:h-96" controls>
                 <source src="Screen Recording 2024-08-31 111242.mp4" type="video/mp4" />
@@ -69,6 +70,26 @@ function Home() {
           </div>
         </div>
       )}
+
+      {/* Slide 2 - Content from PPT */}
+      <div className="h-screen flex flex-col items-center justify-center bg-gray-900 text-white p-10">
+        <h2 className="text-4xl font-bold">Slide 2 Title</h2>
+        <p className="text-lg mt-4 max-w-2xl text-center">This is where the content from the second slide of the PPT will go.</p>
+      </div>
+
+      {/* Slide 3 */}
+      <div className="h-screen flex flex-col items-center justify-center bg-gray-800 text-white p-10">
+        <h2 className="text-4xl font-bold">Slide 3 Title</h2>
+        <p className="text-lg mt-4 max-w-2xl text-center">This is where the content from the third slide of the PPT will go.</p>
+      </div>
+
+      {/* Slide 4 */}
+      <div className="h-screen flex flex-col items-center justify-center bg-gray-700 text-white p-10">
+        <h2 className="text-4xl font-bold">Slide 4 Title</h2>
+        <p className="text-lg mt-4 max-w-2xl text-center">More content from the PPT.</p>
+      </div>
+
+      {/* Additional slides can be added similarly */}
     </div>
   );
 }

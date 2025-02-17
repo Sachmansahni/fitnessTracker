@@ -48,25 +48,26 @@ function AuthPopup() {
     }
   };
 
-
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
+    <div className="fixed inset-0 flex items-center justify-center bg-opacity-0 z-50 bg-cover bg-center" style={{ backgroundImage: "url('Home.png')" }}>
+      <div className="absolute inset-0 bg-black opacity-50"></div>
+      <div className="absolute inset-0 bg-cover bg-center filter blur-md" style={{ backgroundImage: "url('Home.png')" }}></div>
+      <div className="bg-black bg-opacity-60 p-6 rounded-lg shadow-lg w-96 relative">
         <button
           onClick={() => navigate("/")}
-          className="absolute top-2 right-2 bg-red-500 text-white rounded-full px-3 py-1"
+          className="absolute top-2 right-2 bg-[#FFD700] text-black rounded-full px-3 py-1"
         >
           ✕
         </button>
-        <h2 className="text-2xl font-bold mb-4 text-center">
-          {type === "signup" ? "Sign Up" : "Login"}
+        <h2 className="text-2xl font-bold mb-6 text-center text-[#FFD700]">
+          {type === "signup" ? "Create an Account" : "Welcome Back"}
         </h2>
-        <form className="space-y-4" onSubmit={handleSubmit}>
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <input
             type="email"
             name="email"
             placeholder="Email"
-            className="w-full p-2 border rounded"
+            className="w-full p-3 border border-[#FFD700] rounded-lg focus:ring-2 focus:ring-[#FFD700] focus:outline-none"
             required
             value={formData.email}
             onChange={handleChange}
@@ -75,7 +76,7 @@ function AuthPopup() {
             type="password"
             name="password"
             placeholder="Password"
-            className="w-full p-2 border rounded"
+            className="w-full p-3 border border-[#FFD700] rounded-lg focus:ring-2 focus:ring-[#FFD700] focus:outline-none"
             required
             value={formData.password}
             onChange={handleChange}
@@ -85,27 +86,42 @@ function AuthPopup() {
               type="text"
               name="username"
               placeholder="Username"
-              className="w-full p-2 border rounded"
+              className="w-full p-3 border border-[#FFD700] rounded-lg focus:ring-2 focus:ring-[#FFD700] focus:outline-none"
               required
               value={formData.username}
               onChange={handleChange}
             />
           )}
-          <button type="submit" className="w-full bg-teal-500 text-white p-2 rounded hover:bg-teal-600">
+          <button
+            type="submit"
+            className="w-full bg-[#FFD700] text-black p-3 rounded-lg hover:bg-[#FFB800] transition duration-300"
+          >
             {type === "signup" ? "Sign Up" : "Login"}
           </button>
         </form>
-        <p className="text-center mt-4">
-          <button className="text-teal-500 underline" onClick={() => navigate("/forgot-password")}>
-            {type === "login" ? "Forgot Password?" : ""}
-          </button>
-        </p>
-        <p className="text-center mt-4">
-          {type === "signup" ? "Already have an account? " : "Don't have an account? "}
-          <button className="text-teal-500 underline" onClick={() => setType(type === "signup" ? "login" : "signup")}>
-            {type === "signup" ? "Login" : "Sign Up"}
-          </button>
-        </p>
+        <div className="flex justify-between items-center mt-4">
+          {type === "login" && (
+            <p>
+              <button
+                className="text-[#FFD700] hover:underline"
+                onClick={() => navigate("/forgot-password")}
+              >
+                Forgot Password?
+              </button>
+            </p>
+          )}
+          <p className="text-center text-white">
+            {type === "signup"
+              ? "Already have an account?"
+              : "Don't have an account?"}
+            <button
+              className="text-[#FFD700] hover:underline ml-2"
+              onClick={() => setType(type === "signup" ? "login" : "signup")}
+            >
+              {type === "signup" ? "Login" : "Sign Up"}
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );
