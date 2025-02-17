@@ -41,7 +41,7 @@ class ExerciseTracker:
     def track_plank(self, lmList):
         """Check if the user is in a correct plank position."""
         if len(lmList) < 27:
-            return {"plank": False, "time_held": 0}
+            return {"plank": "False", "time_held": 0}
 
         shoulder, hip, ankle = lmList[12], lmList[24], lmList[28]
         angle = self.find_angle(shoulder, hip, ankle)
@@ -56,13 +56,14 @@ class ExerciseTracker:
                 self.start_time = time.time()
             self.holding_time = int(time.time() - self.start_time)
 
+            message ="Try more"
             if self.holding_time<10:
-                return {"plank": True, "time_held": self.holding_time,"angle":int(angle),"message":"Keep going! Hold for a little longer"}
+                return {"plank": bool(True), "time_held": self.holding_time, "angle": int(angle), "message": "Keep going! Hold for a little longer"}
             elif self.holding_time>30:
-                return {"plank":True ,"time_held":self.holding_time,"angle":int(angle),"message":"Great job! You're holding strong!"}
+                return {"plank": bool(True), "time_held": self.holding_time, "angle": int(angle), "message": "Great job! You're holding strong!"}
             elif self.holding_time%10==0:
-                return {"plank":True,"time_held":self.holding_time,"angle":int(angle),"message":f"You've helf the plank for {self.holding_time} seconds!"}
-            return {"plank": True, "time_held": self.holding_time,"angle":int(angle),"message":"try more"}
+                return {"plank": bool(True), "time_held": self.holding_time, "angle": int(angle), "message": f"You've held the plank for {self.holding_time} seconds!"}
+            return {"plank": bool(True), "time_held": self.holding_time, "angle": int(angle), "message": "Try more"}
         else:
             self.start_time = None
             self.holding_time = 0
@@ -81,6 +82,8 @@ class ExerciseTracker:
 
         print(f"Squat Angle:{squat_angle},Torso Angle:{torso_angle}")
 
+        posture="keep body under your control"
+
         if torso_angle>95:
             posture="Lean forward slightly"
         elif torso_angle<65:
@@ -89,11 +92,12 @@ class ExerciseTracker:
             posture="Good postures"
 
         if squat_angle < 85:  # Detect squat down
-            self.exercise_state["squat"] = True
+            self.exercise_state["squat"] = "True"
         elif self.exercise_state["squat"] and squat_angle > 150:  # Detect standing up
             self.rep_count["squat"] += 1
-            self.exercise_state["squat"] = False
+            self.exercise_state["squat"] = "False"
 
+        message="don't loosen your body"
         if self.rep_count["squat"] < 5:
             message = "Keep going! Squats in progress 💪"
         elif self.rep_count["squat"] % 5 == 0:
@@ -102,7 +106,7 @@ class ExerciseTracker:
         return {
             "squat_reps": self.rep_count["squat"],
             "message": message,
-            "correct_squat": squat_angle < 90,
+            "correct_squat": bool(squat_angle < 90),
             "posture": posture  # Added posture feedback
         }
 
