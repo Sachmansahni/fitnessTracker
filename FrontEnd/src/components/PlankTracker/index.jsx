@@ -102,6 +102,9 @@ function PlankTracker() {
                         <p className="text-lg text-gray-800 font-semibold">
                             <strong>Time Held:</strong> {feedback.time_held} sec
                         </p>
+                        <p className="text-lg text-gray-800 font-semibold">
+                            <strong>Message:</strong> {feedback.message}
+                        </p>
                     </div>
                 )}
             </div>

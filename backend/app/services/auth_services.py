@@ -41,6 +41,11 @@ class Token(BaseModel):
 class EmailSchema(BaseModel):
     email:str
 
+class ChangePassSchema(BaseModel):
+    email:str
+    otp:str
+    password:str
+
 def hash_password(password: str):
     return pwd_context.hash(password)
 
@@ -128,3 +133,18 @@ async def send_otp(request : EmailSchema):
     await send_email_otp(request.email, otp)
 
     return {"message": "OTP sent successfully. Check your email."}
+
+
+@router.post("/change-pass")
+async def change_password(request: ChangePassSchema):
+    user= await users_collection.find_one({"email":request.email})
+    if not user:
+        raise HTTPException(status_code=404,detail="This email is not registered")
+    
+    if str(user["otp"])!=request.otp:
+        raise HTTPException(status_code=404,detail="The otp you entered is incorrect or expired")
+    
+    hashed_password = hash_password(request.password)
+    await users_collection.update_one({"email":request.email}, {"$set":{"password":hashed_password}})
+
+    return {"message":"Password updated successfully ."}

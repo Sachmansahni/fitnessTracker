@@ -55,7 +55,14 @@ class ExerciseTracker:
             if self.start_time is None:
                 self.start_time = time.time()
             self.holding_time = int(time.time() - self.start_time)
-            return {"plank": True, "time_held": self.holding_time}
+
+            if self.holding_time<10:
+                return {"plank": True, "time_held": self.holding_time,"angle":int(angle),"message":"Keep going! Hold for a little longer"}
+            elif self.holding_time>30:
+                return {"plank":True ,"time_held":self.holding_time,"angle":int(angle),"message":"Great job! You're holding strong!"}
+            elif self.holding_time%10==0:
+                return {"plank":True,"time_held":self.holding_time,"angle":int(angle),"message":f"You've helf the plank for {self.holding_time} seconds!"}
+            return {"plank": True, "time_held": self.holding_time,"angle":int(angle),"message":"try more"}
         else:
             self.start_time = None
             self.holding_time = 0
@@ -75,6 +82,11 @@ class ExerciseTracker:
         elif self.exercise_state["squat"] and squat_angle > 150:  # Detect standing up
             self.rep_count["squat"] += 1
             self.exercise_state["squat"] = False
+
+        if self.rep_count["squat"]<5:
+            return {"squat_reps":self.rep_count["squat"],"message":"Keep going! squats in progress"}
+        elif self.rep_count["squat"]%5==0:
+            return {"squat_reps":self.rep_count["squat"],"message":f"Great job! you have completed {self.rep_count['squat']} squats!"}
 
         return {"squat_reps": self.rep_count["squat"]}
 

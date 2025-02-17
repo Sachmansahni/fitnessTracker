@@ -48,6 +48,7 @@ class PlankTracker:
             color = (0, 0, 255)  # Red for incorrect position
             
             if angle >= self.threshold_angle:
+                feedback["angle"] =  angle
                 feedback["plank"] = True
                 color = (0, 255, 0)  # Green for correct plank position
                 if self.start_time is None:
