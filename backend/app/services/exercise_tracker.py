@@ -71,33 +71,46 @@ class ExerciseTracker:
 
 
     def track_squat(self, lmList):
-        """Count squat repetitions."""
+        """Count squat repetitions and provide feedback on posture and movement."""
         if len(lmList) < 27:
-            return {"squat_reps": self.rep_count["squat"], "squat_message": "Landmarks missing", "correct_squat": False}
+            return {"squat_reps": self.rep_count["squat"], "squat_message": "Landmarks missing", "correct_squat": False, "posture": "N/A"}
 
-        shoulder,hip,knee,ankle=lmList[12],lmList[24],lmList[26],lmList[28]
-        
-        squat_angle = self.find_angle(hip, knee, ankle)
-        torso_angle = self.find_angle(shoulder,hip,knee)
+        # Get keypoints
+        shoulder, hip, knee, ankle = lmList[12], lmList[24], lmList[26], lmList[28]
+    
+        # Calculate angles
+        squat_angle = self.find_angle(hip, knee, ankle)  # Angle of knee during squat
+        torso_angle = self.find_angle(shoulder, hip, knee)  # Angle of torso
 
-        print(f"Squat Angle:{squat_angle},Torso Angle:{torso_angle}")
+        print(f"Squat Angle: {squat_angle}, Torso Angle: {torso_angle}")
 
-        posture="keep body under your control"
+        # Provide posture feedback
+        if torso_angle > 95:
+            posture = "Lean forward slightly"
+        elif torso_angle < 65:
+            posture = "Too much forward lean"
+        else:
+            posture = "Good posture"
 
-        if torso_angle>95:
-            posture="Lean forward slightly"
-        elif torso_angle<65:
-            posture="Too much forward lean"
-        else : 
-            posture="Good postures"
+        # Detect if the person is standing (Torso angle near 180°)
+        if torso_angle > 170 and squat_angle > 150:  # Torso angle close to upright and knees straight
+            self.exercise_state["squat"] = False  # The person is standing, so no squat in progress
+            return {
+                "squat_reps": self.rep_count["squat"],
+                "squat_message": "Not a squat. Keep your body straight.",
+                "correct_squat": False,
+                "posture": posture
+            }
 
-        if squat_angle < 85:  # Detect squat down
-            self.exercise_state["squat"] = "True"
-        elif self.exercise_state["squat"] and squat_angle > 150:  # Detect standing up
+        # Count squat reps based on knee angle (squat down and stand up logic)
+        if squat_angle < 85:  # Going down (squat)
+            self.exercise_state["squat"] = True
+        elif self.exercise_state["squat"] and squat_angle > 150:  # Coming up (standing)
             self.rep_count["squat"] += 1
-            self.exercise_state["squat"] = "False"
+            self.exercise_state["squat"] = False
 
-        squat_message="don't loosen your body"
+        # Provide squat progress messages
+        squat_message = "Don't loosen your body"
         if self.rep_count["squat"] < 5:
             squat_message = "Keep going! Squats in progress 💪"
         elif self.rep_count["squat"] % 5 == 0:
@@ -105,13 +118,13 @@ class ExerciseTracker:
 
         return {
             "squat_reps": self.rep_count["squat"],
-            "squat_message": message,
-            "correct_squat": bool(squat_angle < 90),
-            "posture": posture  # Added posture feedback
+            "squat_message": squat_message,
+            "correct_squat": squat_angle < 90,  # Check if squat angle is below 90 degrees for correct form
+            "posture": posture  # Feedback on posture
         }
 
     def track_pushup(self, lmList):
-        """Accurately count push-up reps by ensuring correct posture and movement."""
+        """Accurately count push-up reps by ensuring correct posture and movement, only when leaning."""
         if len(lmList) < 29:  # Ensure we have all keypoints
             return {"pushup_reps": self.rep_count["pushup"], "pushup_message": "Not enough landmarks detected"}
 
@@ -119,27 +132,46 @@ class ExerciseTracker:
         shoulder, elbow, wrist = lmList[12], lmList[14], lmList[16]
     
         # Lower body keypoints
-        hip, knee, ankle = lmList[24], lmList[26], lmList[28] 
+        hip, knee, ankle = lmList[24], lmList[26], lmList[28]
 
-        #   Calculate angles
+        # Calculate angles
         pushup_angle = self.find_angle(shoulder, elbow, wrist)  # Arm movement
         body_angle = self.find_angle(shoulder, hip, ankle)  # Ensure body is straight
 
         # Debugging output (print angles for testing)
         print(f"Push-up angle: {pushup_angle}, Body angle: {body_angle}")
 
-        # Ensure the body is in a push-up position before counting
+        # Step 1: Ensure the person is in a leaning (prone) position for push-up
+        if body_angle > 160:  # If body angle is too upright, they are standing
+            return {"pushup_reps": self.rep_count["pushup"], "pushup_message": "Please get into a proper push-up position (leaning)"}
+
+        # Step 2: Ensure the body is straight enough to count a push-up
         if body_angle < 160:  
             return {"pushup_reps": self.rep_count["pushup"], "pushup_message": "Keep your body straight"}
 
-        # Detect push-up movement
-        if pushup_angle < 45:  # Going down
-            self.exercise_state["pushup"] = True
-        elif self.exercise_state["pushup"] and pushup_angle > 160:  # Coming up (count rep)
-            self.rep_count["pushup"] += 1
-            self.exercise_state["pushup"] = False  # Reset for next rep
+        # Step 3: Detect push-up movement and state transitions
+        # Going down: arms are bent (push-up angle less than a certain threshold, usually < 50 degrees)
+        if pushup_angle < 50:  # Going down (arm angle is smaller)
+            self.exercise_state["pushup"] = "down"  # Mark the state as going down
 
-        return {"pushup_reps": self.rep_count["pushup"], "pushup_message": "Good form! Keep going"}
+        # Coming up: arms are extended (push-up angle greater than a certain threshold, usually > 160 degrees)
+        elif self.exercise_state["pushup"] == "down" and pushup_angle > 160:  # Coming up (arm angle is larger)
+            self.rep_count["pushup"] += 1  # Increment rep count
+            self.exercise_state["pushup"] = "up"  # Mark the state as coming up
+
+        # Reset after completing a rep (ensure the next push-up starts fresh)
+        elif self.exercise_state["pushup"] == "up" and pushup_angle < 150:
+            self.exercise_state["pushup"] = "reset"  # Reset to wait for the next rep
+
+        # Step 4: Message feedback based on form
+        if body_angle > 160:
+            return {"pushup_reps": self.rep_count["pushup"], "pushup_message": "Please get into a proper push-up position (leaning)"}
+        elif self.exercise_state["pushup"] == "down":
+            return {"pushup_reps": self.rep_count["pushup"], "pushup_message": "Going down, keep going!"}
+        elif self.exercise_state["pushup"] == "up":
+            return {"pushup_reps": self.rep_count["pushup"], "pushup_message": "Great job! Coming up!"}
+        else:
+            return {"pushup_reps": self.rep_count["pushup"], "pushup_message": "Good form! Keep going!"}
 
 
     def track_jumping_jack(self, lmList):
