@@ -69,8 +69,8 @@ function SquatTracker() {
     return (
         <div className="flex flex-col lg:flex-row min-h-screen p-2 lg:p-5 bg-black">
             {/* Left Side: Heading and Webcam */}
-            <div className="flex flex-col items-start justify-start w-full lg:w-2/3 p-3 lg:p-6 rounded-2xl shadow-2xl">
-                <h2 className="text-3xl lg:text-[80px] font-bold text-[#FFD700] tracking-wide mb-4">
+            <div className="flex flex-col items-start justify-start w-full lg:w-2/3 p-2 lg:p-6 rounded-2xl shadow-2xl">
+                <h2 className="text-3xl lg:text-6xl xl:text-[80px] font-bold text-[#FFD700] tracking-wide mb-4">
                     Squat Exercise Tracker
                 </h2>
                 <Webcam
