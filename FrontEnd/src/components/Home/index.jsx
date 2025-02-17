@@ -14,9 +14,9 @@ function Home() {
   return (
     <div className="flex flex-col scroll-smooth">
       {/* Slide 1 - Existing Home Page */}
-      <div className="h-screen flex flex-col relative overflow-hidden text-white bg-center bg-no-repeat bg-cover" 
+      <div className="h-screen flex flex-col relative overflow-hidden text-white bg-center bg-no-repeat bg-cover"
         style={{ backgroundImage: "url('Home.png')" }}>
-        
+
         {/* Dark Overlay */}
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
 
@@ -38,7 +38,7 @@ function Home() {
           >
             <h1 className="text-6xl font-bold mb-6 uppercase">Track Your Fitness</h1>
             <p className="text-lg max-w-2xl mb-6">Stay on top of your fitness goals with our advanced tracking system.</p>
-            
+
             {isUserLoggedIn ? (
               <div className="space-y-4">
                 <Link to="/plank-tracker" className="bg-yellow-500 text-black px-6 py-2 rounded-lg shadow-md block text-center font-bold">Plank Tracker</Link>
@@ -72,10 +72,21 @@ function Home() {
       )}
 
       {/* Slide 2 - Content from PPT */}
-      <div className="h-screen flex flex-col items-center justify-center bg-gray-900 text-white p-10">
-        <h2 className="text-4xl font-bold">Slide 2 Title</h2>
-        <p className="text-lg mt-4 max-w-2xl text-center">This is where the content from the second slide of the PPT will go.</p>
+      <div className="h-screen flex items-center justify-between bg-gray-900 text-white p-10">
+        {/* Left Side Content */}
+        <div className="flex flex-col w-1/2">
+          <h2 className="text-4xl font-bold">ABOUT OUR FIT FAMILY</h2>
+          <p className="text-lg mt-4">Astraeus was founded in 2001 by a husband and wife team, Bobby and Dora Graff. Since then, we have expanded to over 115 locations nationwide!</p>
+          <button className="mt-6 bg-blue-500 text-white py-2 px-4 rounded">Learn More</button>
+        </div>
+
+        {/* Right Side Images */}
+        <div className="flex w-1/2 space-x-4">
+          <img src="image1.jpg" alt="Image 1" className="w-1/2 h-auto object-cover" />
+          <img src="image2.jpg" alt="Image 2" className="w-1/2 h-auto object-cover" />
+        </div>
       </div>
+
 
       {/* Slide 3 */}
       <div className="h-screen flex flex-col items-center justify-center bg-gray-800 text-white p-10">

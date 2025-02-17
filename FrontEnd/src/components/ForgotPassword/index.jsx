@@ -12,7 +12,7 @@ const ForgotPassword = () => {
         setMessage("Processing...");
 
         try {
-            const response = await fetch("/api/send-otp", {
+            const response = await fetch("https://localhost:8000/send-otp", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -69,24 +69,24 @@ const ForgotPassword = () => {
 
 const OTPVerification = ({ email }) => {
     const [otp, setOtp] = useState("");
-    const [newPassword, setNewPassword] = useState("");
+    const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [message, setMessage] = useState("");
 
     const handleReset = async (e) => {
         e.preventDefault();
-        if (newPassword !== confirmPassword) {
+        if (password !== confirmPassword) {
             setMessage("Passwords do not match.");
             return;
         }
 
         try {
-            const response = await fetch("/api/reset-password", {
+            const response = await fetch("https://localhost:8000/change-pass", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ email, otp, newPassword }),
+                body: JSON.stringify({ email, otp, password }),
             });
 
             const data = await response.json();
@@ -113,8 +113,8 @@ const OTPVerification = ({ email }) => {
                     <input
                         type="password"
                         placeholder="New Password"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         required
                         className="w-full p-2 border border-[#FFD700] rounded-lg focus:ring-2 focus:ring-[#FFD700] focus:outline-none"
                     />

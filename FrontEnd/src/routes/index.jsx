@@ -10,7 +10,7 @@ const routes = [
   { path: "/", element: <Home /> },
   { path: "/plank-tracker", element: <PlankTracker /> },
   { path: "/pushup-tracker", element: <PushupTracker /> },
-  { path: "/squats-tracker", element: <SquatTracker /> },
+  { path: "/squat-tracker", element: <SquatTracker /> },
   { path: "/workout-tracker", element: <WorkoutTracker /> },
   { path: "/auth", element: <AuthPopup /> },
   { path: "/forgot-password", element: <ForgotPassword /> },
