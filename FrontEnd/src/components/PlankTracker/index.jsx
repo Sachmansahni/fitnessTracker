@@ -4,7 +4,12 @@ import Webcam from "react-webcam";
 const WEBSOCKET_URL = "ws://localhost:8000/ws";
 
 function PlankTracker() {
-    const [feedback, setFeedback] = useState(null);
+    const [feedback, setFeedback] = useState({
+        plank: false,
+        angle: 0,
+        time_held: 0,
+        message: "",
+    });
     const [isConnected, setIsConnected] = useState(false);
     const websocketRef = useRef(null);
     const webcamRef = useRef(null);
@@ -33,7 +38,7 @@ function PlankTracker() {
             console.log("Received response:", response);
 
             if (response) {
-                setFeedback(response);
+                setFeedback(response); // Dynamically update feedback
             }
         };
 
@@ -66,11 +71,14 @@ function PlankTracker() {
         };
     }, [isConnected]);
 
-    const angle = feedback?.angle || 0;
+    const { angle, plank } = feedback;
 
     // Convert angle to stroke offset (360 degrees = 2 * π radians)
     const circumference = 2 * Math.PI * 50; // 50 is the radius of the circle
     const strokeOffset = circumference - (angle / 360) * circumference;
+
+    // Conditional ring color based on plank status
+    const ringColor = plank ? "#28a745" : "#dc3545"; // Green if plank is correct, red if incorrect
 
     return (
         <div className="flex min-h-screen p-5 bg-black">
@@ -96,22 +104,33 @@ function PlankTracker() {
                     {isConnected ? "Connected to Server ✅" : "Connecting to Server... ⏳"}
                 </p>
 
-                <h2 className="text-[#FFD700] text-[50px] font-bold uppercase">Stats</h2>
+                <h2 className="text-[#FFD700] text-[50px] font-bold uppercase">Status</h2>
                 <p>
-                    <span className="text-[25px] text-[#FFD700] font-semibold">Plank Status:</span>
-                    <span className={feedback?.plank ? "text-[#FFD700] text-[50px] font-semibold" : "text-white text-[50px] font-semibold"}>
-                        {feedback?.plank ? "Correct ✅" : "Incorrect ❌"}
+                    <span className="text-[25px] text-[#FFD700] font-semibold">Plank Status: </span>
+                    <span className={plank ? "text-[#FFD700] text-[50px] font-semibold" : "text-white text-[50px] font-semibold"}>
+                        {plank ? "Correct ✅" : "Incorrect ❌"}
                     </span>
                 </p>
                 
                 {/* Circular Angle Representation */}
-                <div className="flex justify-center items-center mt-4">
+                <span className="text-[25px] text-[#FFD700] font-semibold">Angle: </span>
+                <span className="flex justify-center items-center mt-4 relative">
                     <svg width="120" height="120" className="transform rotate-90">
+                        {/* Grey Background Ring */}
                         <circle
                             cx="60"
                             cy="60"
                             r="50"
-                            stroke="#FFF700"
+                            stroke="#444" // Grey color for the background ring
+                            strokeWidth="10"
+                            fill="none"
+                        />
+                        {/* Conditional Progress Ring */}
+                        <circle
+                            cx="60"
+                            cy="60"
+                            r="50"
+                            stroke={ringColor} // Green or Red based on plank status
                             strokeWidth="10"
                             fill="none"
                             strokeDasharray={circumference}
@@ -122,15 +141,15 @@ function PlankTracker() {
                     <span className="absolute text-white text-[40px] font-bold">
                         {angle}°
                     </span>
-                </div>
+                </span>
 
                 <p>
-                    <span className="text-[25px] text-[#FFD700] font-semibold">Time Held:</span>
-                    <span className="text-[50px] text-[#FFFFFF] font-semibold">{feedback?.time_held} sec</span>
+                    <span className="text-[25px] text-[#FFD700] font-semibold">Time Held: </span>
+                    <span className="text-[50px] text-[#FFFFFF] font-semibold"> {feedback?.time_held} sec</span>
                 </p>
                 <p>
-                    <span className="text-[25px] text-[#FFD700] font-semibold">Message:</span>
-                    <span className="text-[50px] text-[#FFFFFF] font-semibold">{feedback?.message}</span>
+                    <span className="text-[25px] text-[#FFD700] font-semibold">Message: </span>
+                    <span className="text-[50px] text-[#FFFFFF] font-semibold"> {feedback?.message}</span>
                 </p>
             </div>
         </div>
