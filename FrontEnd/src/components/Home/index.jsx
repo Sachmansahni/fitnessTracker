@@ -1,16 +1,37 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
+import { Menu, User, X } from "lucide-react"
 
 function Home() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [challenge, setChallenge] = useState("")
+  const [reps, setReps] = useState(0)
+  const [points, setPoints] = useState(0)
+  const [showBanner, setShowBanner] = useState(true)
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   useEffect(() => {
     const userStatus = localStorage.getItem("isUserLoggedIn")
     setIsUserLoggedIn(userStatus === "true")
   }, [])
+
+  // useEffect(() => {
+  //   fetch("http://localhost:8000/send-challenge")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log("Data received:", data)
+  //       setChallenge(data.name)
+  //       setReps(data.reps)
+  //       setPoints(data.points)
+
+  //       setTimeout(() => {
+  //         setShowBanner(false)
+  //       }, 60000)
+  //     })
+  //     .catch((error) => console.error("Error fetching data:", error))
+  // }, [])
 
   return (
     <div className="flex flex-col scroll-smooth">
@@ -22,13 +43,49 @@ function Home() {
         {/* Dark Overlay */}
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
 
-        {/* Header with Logo */}
+        {/* Header with Logo and New Buttons */}
         <div className="absolute top-0 left-0 right-0 flex items-center justify-between p-4 sm:p-6 z-10">
           <div className="flex items-center">
             <img src="Logo.png" alt="Hi-Fit Logo" className="h-8 sm:h-12 w-auto mr-2 sm:mr-4" />
             <h1 className="text-2xl sm:text-[40px] font-bold text-[#FFF700]">Hi-Fit</h1>
           </div>
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => {
+                /* Handle profile click */
+              }}
+              className="text-white hover:text-[#FFF700] transition-colors duration-200"
+            >
+              <User className="h-6 w-6" />
+            </button>
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="text-white hover:text-[#FFF700] transition-colors duration-200"
+            >
+              {isMenuOpen ? <X className="h-6 w-6 text-[#FFF700]" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
         </div>
+
+        {/* Menu Overlay */}
+        {isMenuOpen && (
+          <div className="absolute top-0 right-0 w-64 h-screen bg-black bg-opacity-90 z-20 p-6">
+            <nav className="flex flex-col space-y-4">
+              <Link to="/" className="text-white hover:text-[#FFF700] transition-colors duration-200">
+                Home
+              </Link>
+              <Link to="/about" className="text-white hover:text-[#FFF700] transition-colors duration-200">
+                About
+              </Link>
+              <Link to="/services" className="text-white hover:text-[#FFF700] transition-colors duration-200">
+                Services
+              </Link>
+              <Link to="/contact" className="text-white hover:text-[#FFF700] transition-colors duration-200">
+                Contact
+              </Link>
+            </nav>
+          </div>
+        )}
 
         {/* Main Content */}
         <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4">
@@ -186,8 +243,15 @@ function Home() {
       {/* Footer Section */}
       <footer className="bg-[#FFF700] text-black p-4 text-center">
         <p className="text-base sm:text-lg">Email Address</p>
-        <p className="text-base sm:text-lg font-semibold">hiFit001@gmail.com</p>
+        <p className="text-base sm:text-lg font-semibold">hiFitn3ss@gmail.com</p>
       </footer>
+
+      {/* Banner - Only show if showBanner is true */}
+      {showBanner && (
+        <div className="fixed top-6 left-1/2 transform -translate-x-1/2 bg-[#FFF700] text-black text-lg lg:text-2xl font-bold py-2 px-4 rounded-lg shadow-lg transition-all duration-500 opacity-100 scale-100 animate-fadeIn">
+          🏆 Challenge: {challenge} | 🔄 Reps: {reps} | 🎯 Points: {points}
+        </div>
+      )}
     </div>
   )
 }
