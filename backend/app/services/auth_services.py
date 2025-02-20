@@ -32,6 +32,7 @@ class User(BaseModel):
     username: str
     email: str
     password: str
+    totalScore: int
 
 class Token(BaseModel):
     access_token: str
@@ -96,9 +97,17 @@ async def register(user: User):
         "username": user.username, 
         "email": user.email, 
         "password": hashed_password, 
+        "totalScore":0,
         "otp": otp
     })
     return {"message": "User registered successfully."}
+
+@router.post("/leaderBoard")
+async def leaders(user:User):
+    user_list = await users_collection.find().sort("score", -1).to_list(None) 
+     if not user_list:
+        raise HTTPException(status_code=404, detail="No users found")
+    return {"leaderboard": user_list}
 
 @router.post("/token", response_model=Token)
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
@@ -122,14 +131,9 @@ async def send_otp(request : EmailSchema):
 
     if not user:
         raise HTTPException(status_code=404,detail="email not registered")
-    
-    # Generate a random 6-digit OTP
     otp = str(generate_otp())
-    
-    # Store OTP temporarily in the database (expires in 5 minutes)
     await users_collection.update_one({"email": request.email}, {"$set": {"otp": otp, "otp_expiry": datetime.utcnow() + timedelta(minutes=5)}})
 
-    # Send OTP to the user via email
     await send_email_otp(request.email, otp)
 
     return {"message": "OTP sent successfully. Check your email."}
