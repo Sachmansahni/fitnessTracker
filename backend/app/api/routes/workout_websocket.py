@@ -76,32 +76,44 @@ def extract_landmarks(result):
 @app.websocket("/ws/workout")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
-
+    print("client connected")
     frame_index = 1  # Set a default frame_index (this can be dynamic if you want to track it)
+    try:
+        while True:
+            try:
+                # Receive the frame from the websocket
+                frame_base64 = await websocket.receive_text()
 
-    while True:
-        try:
-            # Receive the frame from the websocket
-            frame_base64 = await websocket.receive_text()
+                # Decode the base64 frame
+                frame = decode_base64_to_frame(frame_base64)
 
-            # Decode the base64 frame
-            frame = decode_base64_to_frame(frame_base64)
+                # Process the frame and extract landmarks
+                result = process_frame(frame)
+                user_landmarks = extract_landmarks(result)
 
-            # Process the frame and extract landmarks
-            result = process_frame(frame)
-            user_landmarks = extract_landmarks(result)
+                # Calculate the accuracy based on stored landmarks
+                accuracy = calculate_accuracy(user_landmarks, stored_landmarks, frame_index)
 
-            # Calculate the accuracy based on stored landmarks
-            accuracy = calculate_accuracy(user_landmarks, stored_landmarks, frame_index)
+                # Send the accuracy back to the client
+                await websocket.send_json({
+                    "accuracy": accuracy
+                })
 
-            # Send the accuracy back to the client
-            await websocket.send_json({
-                "accuracy": accuracy
-            })
+                # Increment frame_index (or dynamically assign based on your logic)
+                frame_index += 1
+            
+            except Exception as e:
+                print(f"Error processing frame: {e}")
+                # Send an error message if something goes wrong
+                error_message = json.dumps({"error": str(e)})
+                await websocket.send_text(error_message)
 
-            # Increment frame_index (or dynamically assign based on your logic)
-            frame_index += 1
+    except WebSocketDisconnect:
+        print("Client disconnected")
 
-        except WebSocketDisconnect:
-            print("Client disconnected")
-            break
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+    
+    finally:
+        await websocket.close()
+        print("Connection closed")
