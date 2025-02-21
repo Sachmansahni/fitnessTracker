@@ -9,7 +9,6 @@ aiosmtplib
 opencv-python
 opencv-python-headless
 numpy
-base64
 json
 pydantic
 pyJWT
