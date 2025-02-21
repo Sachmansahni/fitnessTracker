@@ -6,9 +6,12 @@ bcrypt
 python-multipart
 python-jose[cryptography]
 aiosmtplib
+opencv-python
 opencv-python-headless
 numpy
+json
 pydantic
 pyJWT
-python-dotenv
+email
 mediapipe
+websockets   # <- Add this line
