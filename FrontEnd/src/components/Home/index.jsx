@@ -107,7 +107,7 @@ function Home() {
             <motion.div
               className="absolute right-0 w-64 h-full p-6 overflow-y-auto z-20 shadow-6xl"
               style={{
-                background: "linear-gradient(to left, rgba(0, 0, 0, 0.75) 10%, rgba(0, 0, 0, 0.5) 90%, rgba(0, 0, 0, 0) 100%)",
+                background: "linear-gradient(to left, rgba(0, 0, 0, 0.8) 10%, rgba(0, 0, 0, 0.2) 90%, rgba(0, 0, 0, 0) 100%)",
               }}
               initial="closed"
               animate="open"
