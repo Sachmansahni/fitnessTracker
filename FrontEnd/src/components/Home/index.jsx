@@ -1,21 +1,51 @@
 import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
-import { motion } from "framer-motion"
-// import { Menu, User, X } from "lucide-react"
+import { Link, useNavigate } from "react-router-dom"
+import { motion, AnimatePresence } from "framer-motion"
+import { Menu, User, X } from "lucide-react"
+import { Dumbbell, CalendarCheck, Trophy, Users } from "lucide-react";
 
 function Home() {
   const [challenge, setChallenge] = useState("")
   const [reps, setReps] = useState(0)
   const [points, setPoints] = useState(0)
-  // const [showBanner, setShowBanner] = useState(true)
+  const [showBanner, setShowBanner] = useState(true)
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const userStatus = localStorage.getItem("isUserLoggedIn")
     setIsUserLoggedIn(userStatus === "true")
   }, [])
+
+  const handleProfileClick = () => {
+    console.log("Profile clicked")
+    // Add your profile click logic here
+  }
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
+  }
+
+  const menuVariants = {
+    closed: {
+      x: "100%",
+      opacity: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeInOut",
+      },
+    },
+    open: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        ease: "easeInOut",
+      },
+    },
+  }
 
   // useEffect(() => {
   //   fetch("http://localhost:8000/send-challenge")
@@ -28,10 +58,14 @@ function Home() {
 
   //       setTimeout(() => {
   //         setShowBanner(false)
-  //       }, 60000)
+  //       }, 30000)
   //     })
   //     .catch((error) => console.error("Error fetching data:", error))
   // }, [])
+
+  const handleBannerClick = () => {
+    navigate("/daily-challenge")
+  }
 
   return (
     <div className="flex flex-col scroll-smooth">
@@ -44,7 +78,7 @@ function Home() {
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
 
         {/* Header with Logo and New Buttons */}
-        <div className="absolute top-0 left-0 right-0 flex items-center justify-between p-4 sm:p-6 z-10">
+        <div className="absolute top-0 left-0 right-0 flex items-center justify-between p-4 sm:p-6 z-30 bg-transparent">
           <div className="flex items-center">
             <img src="Logo.png" alt="Hi-Fit Logo" className="h-8 sm:h-12 w-auto mr-2 sm:mr-4" />
             <h1 className="text-2xl sm:text-[40px] font-bold text-[#FFF700]">Hi-Fit</h1>
@@ -52,46 +86,74 @@ function Home() {
           {isUserLoggedIn && (
             <div className="flex items-center space-x-4">
               <button
-                onClick={() => {
-                  console.log("Clicked");
-                }}
-                className="cursor-pointer text-white hover:text-[#FFF700] transition-colors duration-200 z-50"
+                onClick={handleProfileClick}
+                className="text-white hover:text-[#FFF700] transition-colors duration-200 focus:outline-none"
               >
-                {/* <User className="h-6 w-6" /> */}
-                User
+                <User className="h-6 w-6" />
               </button>
               <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="cursor-pointer text-white hover:text-[#FFF700] transition-colors duration-200"
+                onClick={toggleMenu}
+                className="text-white hover:text-[#FFF700] transition-colors duration-200 focus:outline-none"
               >
-                {isMenuOpen ? "X" : "Menu"}
+                {isMenuOpen ? <X className="h-6 w-6 text-[#FFF700]" /> : <Menu className="h-6 w-6" />}
               </button>
             </div>
           )}
         </div>
 
         {/* Menu Overlay */}
-        {isMenuOpen && (
-          <div className="absolute top-0 right-0 w-64 h-screen bg-black bg-opacity-90 z-20 p-6">
-            <nav className="flex flex-col space-y-4">
-              <Link to="/daily-challenge" className="text-white hover:text-[#FFF700] transition-colors duration-200">
-                Daily Challenge
-              </Link>
-              <Link to="/workout-tracker" className="text-white hover:text-[#FFF700] transition-colors duration-200">
-                Workout Tracker
-              </Link>
-              <Link to="/leader-board" className="text-white hover:text-[#FFF700] transition-colors duration-200">
-                LeaderBoard
-              </Link>
-              <Link to="/share" className="text-white hover:text-[#FFF700] transition-colors duration-200">
-                Community Post
-              </Link>
-            </nav>
-          </div>
-        )}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              className="absolute right-0 w-64 h-full p-6 overflow-y-auto z-20 shadow-6xl"
+              style={{
+                background: "linear-gradient(to left, rgba(0, 0, 0, 0.75) 10%, rgba(0, 0, 0, 0.5) 90%, rgba(0, 0, 0, 0) 100%)",
+              }}
+              initial="closed"
+              animate="open"
+              exit="closed"
+              variants={menuVariants}
+            >
+              <nav className="flex flex-col items-start space-y-6 mt-16">
+                <Link
+                  to="/daily-challenge"
+                  className="flex items-center space-x-3 text-white text-lg transition-all duration-300 hover:text-[#FFF700] hover:scale-105"
+                >
+                  <CalendarCheck className="h-6 w-6 text-[#FFF700]" />
+                  <span>Daily Challenge</span>
+                </Link>
+
+                <Link
+                  to="/workout-tracker"
+                  className="flex items-center space-x-3 text-white text-lg transition-all duration-300 hover:text-[#FFF700] hover:scale-105"
+                >
+                  <Dumbbell className="h-6 w-6 text-[#FFF700]" />
+                  <span>Workout Tracker</span>
+                </Link>
+
+                <Link
+                  to="/leader-board"
+                  className="flex items-center space-x-3 text-white text-lg transition-all duration-300 hover:text-[#FFF700] hover:scale-105"
+                >
+                  <Trophy className="h-6 w-6 text-[#FFF700]" />
+                  <span>LeaderBoard</span>
+                </Link>
+
+                <Link
+                  to="/share"
+                  className="flex items-center space-x-3 text-white text-lg transition-all duration-300 hover:text-[#FFF700] hover:scale-105"
+                >
+                  <Users className="h-6 w-6 text-[#FFF700]" />
+                  <span>Community Post</span>
+                </Link>
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
 
         {/* Main Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4">
+        <div className="relative flex flex-col items-center justify-center min-h-screen p-4">
           <motion.div
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -121,12 +183,6 @@ function Home() {
                   className="bg-[#FFF700] text-black px-4 sm:px-6 py-2 rounded-lg shadow-md block text-center font-bold text-sm sm:text-base"
                 >
                   Squat Tracker
-                </Link>
-                <Link
-                  to="/workout-tracker"
-                  className="bg-[#FFFB33] text-black px-4 sm:px-6 py-2 rounded-lg shadow-md block text-center font-bold text-sm sm:text-base"
-                >
-                  Workout Tracker
                 </Link>
               </div>
             ) : (
@@ -250,11 +306,14 @@ function Home() {
       </footer>
 
       {/* Banner - Only show if showBanner is true */}
-      {/* {showBanner && (
-        <div className="fixed top-6 left-1/2 transform -translate-x-1/2 bg-[#FFF700] text-black text-lg lg:text-2xl font-bold py-2 px-4 rounded-lg shadow-lg transition-all duration-500 opacity-100 scale-100 animate-fadeIn">
+      {showBanner && (
+        <div
+          onClick={handleBannerClick}
+          className="fixed top-6 left-1/2 transform -translate-x-1/2 bg-[#FFF700] text-black text-lg lg:text-2xl font-bold py-2 px-4 rounded-lg shadow-lg transition-all duration-500 opacity-100 scale-100 animate-fadeIn cursor-pointer"
+        >
           🏆 Challenge: {challenge} | 🔄 Reps: {reps} | 🎯 Points: {points}
         </div>
-      )} */}
+      )}
     </div>
   )
 }
