@@ -12,6 +12,7 @@ function Home() {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isProfileOpen, setIsProfileOpen] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -20,12 +21,17 @@ function Home() {
   }, [])
 
   const handleProfileClick = () => {
-    console.log("Profile clicked")
-    // Add your profile click logic here
+    if (isMenuOpen) {
+      setIsMenuOpen(false);
+    }
+    setIsProfileOpen(!isProfileOpen);
   }
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
+    if (isProfileOpen) {
+      setIsProfileOpen(false);
+    }
+    setIsMenuOpen(!isMenuOpen);
   }
 
   const menuVariants = {
@@ -103,6 +109,48 @@ function Home() {
 
         {/* Menu Overlay */}
         <AnimatePresence>
+          {isProfileOpen && (
+            <motion.div
+              className="absolute right-0 w-64 h-full p-6 overflow-y-auto z-20 shadow-6xl"
+              style={{
+                background: "linear-gradient(to left, rgba(0, 0, 0, 0.8) 10%, rgba(0, 0, 0, 0.2) 90%, rgba(0, 0, 0, 0) 100%)",
+              }}
+              initial="closed"
+              animate="open"
+              exit="closed"
+              variants={menuVariants}
+            >
+              <nav className="flex flex-col items-start space-y-6 mt-16">
+                <Link
+                  to="/daily-challenge"
+                  className="flex items-center space-x-3 text-white text-lg transition-all duration-300 hover:text-[#FFF700] hover:scale-105"
+                >
+                  <CalendarCheck className="h-6 w-6 text-[#FFF700]" />
+                  <span>My Profile</span>
+                </Link>
+
+                <Link
+                  to="/workout-tracker"
+                  className="flex items-center space-x-3 text-white text-lg transition-all duration-300 hover:text-[#FFF700] hover:scale-105"
+                >
+                  <Dumbbell className="h-6 w-6 text-[#FFF700]" />
+                  <span>Settings</span>
+                </Link>
+
+                <Link
+                  to="/leader-board"
+                  className="flex items-center space-x-3 text-white text-lg transition-all duration-300 hover:text-[#FFF700] hover:scale-105"
+                >
+                  <Trophy className="h-6 w-6 text-[#FFF700]" />
+                  <span>Sign Out</span>
+                </Link>
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Profile Overlay */}
+        <AnimatePresence>
           {isMenuOpen && (
             <motion.div
               className="absolute right-0 w-64 h-full p-6 overflow-y-auto z-20 shadow-6xl"
@@ -150,7 +198,6 @@ function Home() {
             </motion.div>
           )}
         </AnimatePresence>
-
 
         {/* Main Content */}
         <div className="relative flex flex-col items-center justify-center min-h-screen p-4">
