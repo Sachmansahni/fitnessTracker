@@ -4,7 +4,13 @@ import { useNavigate } from "react-router-dom";
 function AuthPopup() {
   const navigate = useNavigate();
   const [type, setType] = useState("signup");
-  const [formData, setFormData] = useState({ email: "", password: "", username: "" });
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    username: "",
+    totalScore: 0,
+    daily_challenge: "No Challenges available",
+  });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,10 +26,14 @@ function AuthPopup() {
       const formDataToSend = new URLSearchParams();
       formDataToSend.append("username", formData.email);
       formDataToSend.append("password", formData.password);
+      console.log(formDataToSend);
 
       const response = await fetch(url, {
         method: "POST",
-        headers: type === "signup" ? { "Content-Type": "application/json" } : { "Content-Type": "application/x-www-form-urlencoded" },
+        headers:
+          type === "signup"
+            ? { "Content-Type": "application/json" }
+            : { "Content-Type": "application/x-www-form-urlencoded" },
         body: type === "signup" ? JSON.stringify(formData) : formDataToSend,
       });
 
@@ -49,9 +59,15 @@ function AuthPopup() {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-opacity-0 z-50 bg-cover bg-center" style={{ backgroundImage: "url('Home.png')" }}>
+    <div
+      className="fixed inset-0 flex items-center justify-center bg-opacity-0 z-50 bg-cover bg-center"
+      style={{ backgroundImage: "url('Home.png')" }}
+    >
       <div className="absolute inset-0 bg-black opacity-50"></div>
-      <div className="absolute inset-0 bg-cover bg-center filter blur-md" style={{ backgroundImage: "url('Home.png')" }}></div>
+      <div
+        className="absolute inset-0 bg-cover bg-center filter blur-md"
+        style={{ backgroundImage: "url('Home.png')" }}
+      ></div>
       <div className="bg-black bg-opacity-60 p-6 rounded-lg shadow-lg w-96 relative">
         <button
           onClick={() => navigate("/")}
