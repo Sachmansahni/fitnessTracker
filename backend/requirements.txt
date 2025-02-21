@@ -6,7 +6,8 @@ bcrypt
 python-multipart 
 python-jose[cryptography]
 aiosmtplib
-opencv
+opencv-python
+opencv-python-headless
 numpy
 base64
 json
