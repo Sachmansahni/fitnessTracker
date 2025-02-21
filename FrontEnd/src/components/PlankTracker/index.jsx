@@ -4,6 +4,7 @@ import Webcam from "react-webcam"
 const WEBSOCKET_URL = "ws://localhost:8000/ws"
 
 function PlankTracker() {
+  const [frameNo, setFrameNo] = useState(1);
   const [feedback, setFeedback] = useState({
     plank: false,
     angle: 0,
@@ -54,8 +55,10 @@ function PlankTracker() {
         websocketRef.current.send(
           JSON.stringify({
             frame: imageSrc.split(",")[1],
+            frame_No: frameNo,
           }),
         )
+        setFrameNo(frameNo + 1);
       }
     }
   }
