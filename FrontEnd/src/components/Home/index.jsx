@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, User, X } from "lucide-react"
-import { Dumbbell, CalendarCheck, Trophy, Users } from "lucide-react";
+import { Dumbbell, CalendarCheck, Trophy, Users, Settings, LogOut, UserCircle } from "lucide-react";
 
 function Home() {
   const [challenge, setChallenge] = useState("")
@@ -95,7 +95,7 @@ function Home() {
                 onClick={handleProfileClick}
                 className="text-white hover:text-[#FFF700] transition-colors duration-200 focus:outline-none"
               >
-                <User className="h-6 w-6" />
+                {isProfileOpen ? <X className="h-6 w-6 text-[#FFF700]" /> : <User className="h-6 w-6" />}
               </button>
               <button
                 onClick={toggleMenu}
@@ -122,28 +122,28 @@ function Home() {
             >
               <nav className="flex flex-col items-start space-y-6 mt-16">
                 <Link
-                  to="/daily-challenge"
+                  to="/profile"
                   className="flex items-center space-x-3 text-white text-lg transition-all duration-300 hover:text-[#FFF700] hover:scale-105"
                 >
-                  <CalendarCheck className="h-6 w-6 text-[#FFF700]" />
+                  <UserCircle className="h-6 w-6 text-[#FFF700]" />
                   <span>My Profile</span>
                 </Link>
 
                 <Link
-                  to="/workout-tracker"
+                  to="/settings"
                   className="flex items-center space-x-3 text-white text-lg transition-all duration-300 hover:text-[#FFF700] hover:scale-105"
                 >
-                  <Dumbbell className="h-6 w-6 text-[#FFF700]" />
+                  <Settings className="h-6 w-6 text-[#FFF700]" />
                   <span>Settings</span>
                 </Link>
 
-                <Link
-                  to="/leader-board"
-                  className="flex items-center space-x-3 text-white text-lg transition-all duration-300 hover:text-[#FFF700] hover:scale-105"
-                >
-                  <Trophy className="h-6 w-6 text-[#FFF700]" />
+                <button className="flex items-center space-x-3 text-white text-lg transition-all duration-300 hover:text-[#FFF700] hover:scale-105" onClick={() => {
+                  localStorage.clear();
+                  window.location.reload();
+                }}>
+                  <LogOut className="h-6 w-6 text-[#FFF700]" />
                   <span>Sign Out</span>
-                </Link>
+                </button>
               </nav>
             </motion.div>
           )}
@@ -172,7 +172,7 @@ function Home() {
                 </Link>
 
                 <Link
-                  to="/workout-tracker"
+                  to="/workouttracker"
                   className="flex items-center space-x-3 text-white text-lg transition-all duration-300 hover:text-[#FFF700] hover:scale-105"
                 >
                   <Dumbbell className="h-6 w-6 text-[#FFF700]" />
@@ -214,19 +214,19 @@ function Home() {
             {isUserLoggedIn ? (
               <div className="space-y-2 mt-4">
                 <Link
-                  to="/plank-tracker"
+                  to="/planktracker"
                   className="bg-[#FFF700] text-black px-4 sm:px-6 py-2 rounded-lg shadow-md block text-center font-bold text-sm sm:text-base"
                 >
                   Plank Tracker
                 </Link>
                 <Link
-                  to="/pushup-tracker"
+                  to="/pushuptracker"
                   className="bg-[#FFEF00] text-black px-4 sm:px-6 py-2 rounded-lg shadow-md block text-center font-bold text-sm sm:text-base"
                 >
                   Push-up Tracker
                 </Link>
                 <Link
-                  to="/squat-tracker"
+                  to="/squattracker"
                   className="bg-[#FFF700] text-black px-4 sm:px-6 py-2 rounded-lg shadow-md block text-center font-bold text-sm sm:text-base"
                 >
                   Squat Tracker
@@ -236,16 +236,16 @@ function Home() {
               <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 justify-center mt-4">
                 <Link
                   to="/auth"
-                  className="bg-[#FFF700] text-black px-4 sm:px-6 py-2 rounded-lg shadow-md font-bold text-sm sm:text-base"
+                  className="bg-white text-black px-4 sm:px-6 py-2 rounded-lg shadow-md font-bold text-sm sm:text-base"
                 >
                   Get Started
                 </Link>
-                <button
+                {/* <button
                   onClick={() => setIsOpen(true)}
                   className="bg-white text-black px-4 sm:px-6 py-2 rounded-lg shadow-md font-bold text-sm sm:text-base"
                 >
                   Demo Video
-                </button>
+                </button> */}
               </div>
             )}
           </motion.div>
@@ -356,7 +356,7 @@ function Home() {
       {showBanner && (
         <div
           onClick={handleBannerClick}
-          className="fixed top-6 left-1/2 transform -translate-x-1/2 bg-[#FFF700] text-black text-lg lg:text-2xl font-bold py-2 px-4 rounded-lg shadow-lg transition-all duration-500 opacity-100 scale-100 animate-fadeIn cursor-pointer"
+          className="fixed top-12 left-1/2 transform -translate-x-1/2 bg-[#FFF700] text-black text-lg lg:text-2xl font-bold py-2 px-4 rounded-lg shadow-lg transition-all duration-500 opacity-100 scale-100 animate-fadeIn cursor-pointer"
         >
           🏆 Challenge: {challenge} | 🔄 Reps: {reps} | 🎯 Points: {points}
         </div>
