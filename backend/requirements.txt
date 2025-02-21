@@ -11,3 +11,4 @@ numpy
 pydantic
 pyJWT
 python-dotenv
+mediapipe
