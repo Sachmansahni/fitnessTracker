@@ -43,7 +43,7 @@ const LeaderBoardPage = () => {
     }, []);
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-900">
+        <div className="flex justify-center items-center min-h-screen bg-white">
             <LeaderBoard users={users} loggedInUserId={loggedInUserId} />
         </div>
     );
@@ -53,7 +53,7 @@ export default LeaderBoardPage;
 
 const LeaderBoard = ({ users, loggedInUserId }) => {
     return (
-        <div className="w-full max-w-2xl mx-auto p-4 bg-gray-900 rounded-lg shadow-lg">
+        <div className="w-full max-w-2xl mx-auto p-4 rounded-lg shadow-lg" style={{ backgroundColor: "#141414" }}>
             <h2 className="text-center text-3xl font-bold text-[#FFF700] mb-6">Leaderboard</h2>
 
             {/* Podium for Top 3 */}

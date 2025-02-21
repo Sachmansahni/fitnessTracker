@@ -164,7 +164,7 @@ function Home() {
             >
               <nav className="flex flex-col items-start space-y-6 mt-16">
                 <Link
-                  to="/daily-challenge"
+                  to="/dailychallenge"
                   className="flex items-center space-x-3 text-white text-lg transition-all duration-300 hover:text-[#FFF700] hover:scale-105"
                 >
                   <CalendarCheck className="h-6 w-6 text-[#FFF700]" />
@@ -180,7 +180,7 @@ function Home() {
                 </Link>
 
                 <Link
-                  to="/leader-board"
+                  to="/leaderboard"
                   className="flex items-center space-x-3 text-white text-lg transition-all duration-300 hover:text-[#FFF700] hover:scale-105"
                 >
                   <Trophy className="h-6 w-6 text-[#FFF700]" />
