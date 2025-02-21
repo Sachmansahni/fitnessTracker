@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
-import { Menu, User, X } from "lucide-react"
+// import { Menu, User, X } from "lucide-react"
 
 function Home() {
   const [challenge, setChallenge] = useState("")
   const [reps, setReps] = useState(0)
   const [points, setPoints] = useState(0)
-  const [showBanner, setShowBanner] = useState(true)
+  // const [showBanner, setShowBanner] = useState(true)
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -49,39 +49,42 @@ function Home() {
             <img src="Logo.png" alt="Hi-Fit Logo" className="h-8 sm:h-12 w-auto mr-2 sm:mr-4" />
             <h1 className="text-2xl sm:text-[40px] font-bold text-[#FFF700]">Hi-Fit</h1>
           </div>
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => {
-                /* Handle profile click */
-              }}
-              className="text-white hover:text-[#FFF700] transition-colors duration-200"
-            >
-              <User className="h-6 w-6" />
-            </button>
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-white hover:text-[#FFF700] transition-colors duration-200"
-            >
-              {isMenuOpen ? <X className="h-6 w-6 text-[#FFF700]" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
+          {isUserLoggedIn && (
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => {
+                  console.log("Clicked");
+                }}
+                className="cursor-pointer text-white hover:text-[#FFF700] transition-colors duration-200 z-50"
+              >
+                {/* <User className="h-6 w-6" /> */}
+                User
+              </button>
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="cursor-pointer text-white hover:text-[#FFF700] transition-colors duration-200"
+              >
+                {isMenuOpen ? "X" : "Menu"}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Menu Overlay */}
         {isMenuOpen && (
           <div className="absolute top-0 right-0 w-64 h-screen bg-black bg-opacity-90 z-20 p-6">
             <nav className="flex flex-col space-y-4">
-              <Link to="/" className="text-white hover:text-[#FFF700] transition-colors duration-200">
-                Home
+              <Link to="/daily-challenge" className="text-white hover:text-[#FFF700] transition-colors duration-200">
+                Daily Challenge
               </Link>
-              <Link to="/about" className="text-white hover:text-[#FFF700] transition-colors duration-200">
-                About
+              <Link to="/workout-tracker" className="text-white hover:text-[#FFF700] transition-colors duration-200">
+                Workout Tracker
               </Link>
-              <Link to="/services" className="text-white hover:text-[#FFF700] transition-colors duration-200">
-                Services
+              <Link to="/leader-board" className="text-white hover:text-[#FFF700] transition-colors duration-200">
+                LeaderBoard
               </Link>
-              <Link to="/contact" className="text-white hover:text-[#FFF700] transition-colors duration-200">
-                Contact
+              <Link to="/share" className="text-white hover:text-[#FFF700] transition-colors duration-200">
+                Community Post
               </Link>
             </nav>
           </div>
@@ -247,11 +250,11 @@ function Home() {
       </footer>
 
       {/* Banner - Only show if showBanner is true */}
-      {showBanner && (
+      {/* {showBanner && (
         <div className="fixed top-6 left-1/2 transform -translate-x-1/2 bg-[#FFF700] text-black text-lg lg:text-2xl font-bold py-2 px-4 rounded-lg shadow-lg transition-all duration-500 opacity-100 scale-100 animate-fadeIn">
           🏆 Challenge: {challenge} | 🔄 Reps: {reps} | 🎯 Points: {points}
         </div>
-      )}
+      )} */}
     </div>
   )
 }

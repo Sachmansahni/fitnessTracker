@@ -17,7 +17,7 @@
     "@mediapipe/camera_utils": "^0.3.1675466862",
     "@mediapipe/pose": "^0.5.1675469404",
     "@tensorflow/tfjs-core": "^4.22.0",
-    "framer-motion": "^12.4.3",
+    "framer-motion": "^12.4.7",
     "lucide-react": "^0.475.0",
     "motion": "^12.4.7",
     "react": "^19.0.0",
