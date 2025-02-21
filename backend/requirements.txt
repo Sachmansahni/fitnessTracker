@@ -8,10 +8,9 @@ python-jose[cryptography]
 aiosmtplib
 opencv-python
 opencv-python-headless
-numpy
-json
+numpy<=1.21.6  # Ensures compatibility with older Python versions
 pydantic
 pyJWT
-email
 mediapipe
-websockets   # <- Add this line
+websockets
+python-dotenv  # Correct library name for dotenv
