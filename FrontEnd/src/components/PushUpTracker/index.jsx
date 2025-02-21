@@ -5,6 +5,7 @@ const WEBSOCKET_URL = "ws://localhost:8000/ws"
 
 function PushupTracker() {
   const [feedback, setFeedback] = useState(null)
+  const [frameNo, setFrameNo] = useState(1);
   const [isConnected, setIsConnected] = useState(false)
   const websocketRef = useRef(null)
   const webcamRef = useRef(null)
@@ -48,9 +49,11 @@ function PushupTracker() {
       if (imageSrc) {
         websocketRef.current.send(
           JSON.stringify({
-            frame: imageSrc.split(",")[1], // Remove "data:image/jpeg;base64,"
+            frame: imageSrc.split(",")[1],
+            frame_No: frameNo,
           }),
         )
+        setFrameNo(frameNo + 1);
       }
     }
   }

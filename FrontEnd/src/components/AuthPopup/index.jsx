@@ -19,7 +19,7 @@ function AuthPopup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const baseUrl = "http://localhost:8000";
+    const baseUrl = import.meta.env.VITE_API_URL;
     const url = type === "signup" ? `${baseUrl}/register` : `${baseUrl}/token`;
 
     try {

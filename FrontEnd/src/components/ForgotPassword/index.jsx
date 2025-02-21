@@ -12,7 +12,7 @@ const ForgotPassword = () => {
         setMessage("Processing...");
 
         try {
-            const response = await fetch("http://localhost:8000/send-otp", {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/send-otp`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -81,7 +81,7 @@ const OTPVerification = ({ email }) => {
         }
 
         try {
-            const response = await fetch("http://localhost:8000/change-pass", {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/change-pass`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

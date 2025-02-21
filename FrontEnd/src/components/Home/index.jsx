@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, User, X } from "lucide-react"
-import { Dumbbell, CalendarCheck, Trophy, Users, Settings, LogOut, UserCircle } from "lucide-react";
+import { Dumbbell, CalendarCheck, Trophy, Users, Settings, LogOut, UserCircle, Accessibility, HandMetal, Activity } from "lucide-react";
 
 function Home() {
   const [challenge, setChallenge] = useState("")
@@ -14,6 +14,20 @@ function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isProfileOpen, setIsProfileOpen] = useState(false)
   const navigate = useNavigate()
+  const [isLargeScreen, setIsLargeScreen] = useState(window.matchMedia("(min-width: 1024px)").matches);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 1024px)");
+    const handleResize = () => setIsLargeScreen(mediaQuery.matches);
+    mediaQuery.addEventListener("change", handleResize);
+    return () => mediaQuery.removeEventListener("change", handleResize);
+  }, []);
+
+  const style = {
+    background: isLargeScreen
+      ? "linear-gradient(to left, rgba(0, 0, 0, 0.8) 10%, rgba(0, 0, 0, 0.2) 90%, rgba(0, 0, 0, 0) 100%)"
+      : "black",
+  };
 
   useEffect(() => {
     const userStatus = localStorage.getItem("isUserLoggedIn")
@@ -53,26 +67,26 @@ function Home() {
     },
   }
 
-  // useEffect(() => {
-  //   fetch("http://localhost:8000/send-challenge")
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("Data received:", data)
-  //       setChallenge(data.name)
-  //       setReps(data.reps)
-  //       setPoints(data.points)
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/send-challenge`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Data received:", data)
+        setChallenge(data.name)
+        setReps(data.reps)
+        setPoints(data.points)
 
-  //       setTimeout(() => {
-  //         setShowBanner(false)
-  //       }, 30000)
-  //     })
-  //     .catch((error) => console.error("Error fetching data:", error))
-  // }, [])
+        setTimeout(() => {
+          setShowBanner(false)
+        }, 30000)
+      })
+      .catch((error) => console.error("Error fetching data:", error))
+  }, [])
 
   const handleBannerClick = () => {
-    navigate("/daily-challenge")
+    navigate("/dailychallenge")
   }
-
+  console.log(import.meta.env.VITE_API_URL)
   return (
     <div className="flex flex-col scroll-smooth">
       {/* Slide 1 - Existing Home Page */}
@@ -112,9 +126,7 @@ function Home() {
           {isProfileOpen && (
             <motion.div
               className="absolute right-0 w-64 h-full p-6 overflow-y-auto z-20 shadow-6xl"
-              style={{
-                background: "linear-gradient(to left, rgba(0, 0, 0, 0.8) 10%, rgba(0, 0, 0, 0.2) 90%, rgba(0, 0, 0, 0) 100%)",
-              }}
+              style={style}
               initial="closed"
               animate="open"
               exit="closed"
@@ -154,9 +166,7 @@ function Home() {
           {isMenuOpen && (
             <motion.div
               className="absolute right-0 w-64 h-full p-6 overflow-y-auto z-20 shadow-6xl"
-              style={{
-                background: "linear-gradient(to left, rgba(0, 0, 0, 0.8) 10%, rgba(0, 0, 0, 0.2) 90%, rgba(0, 0, 0, 0) 100%)",
-              }}
+              style={style}
               initial="closed"
               animate="open"
               exit="closed"
@@ -164,19 +174,25 @@ function Home() {
             >
               <nav className="flex flex-col items-start space-y-6 mt-16">
                 <Link
-                  to="/dailychallenge"
+                  to="/planktracker"
                   className="flex items-center space-x-3 text-white text-lg transition-all duration-300 hover:text-[#FFF700] hover:scale-105"
                 >
-                  <CalendarCheck className="h-6 w-6 text-[#FFF700]" />
-                  <span>Daily Challenge</span>
+                  <Accessibility className="h-6 w-6 text-[#FFF700]" />
+                  <span>Plank Tracker</span>
                 </Link>
-
                 <Link
-                  to="/workouttracker"
+                  to="/pushuptracker"
                   className="flex items-center space-x-3 text-white text-lg transition-all duration-300 hover:text-[#FFF700] hover:scale-105"
                 >
-                  <Dumbbell className="h-6 w-6 text-[#FFF700]" />
-                  <span>Workout Tracker</span>
+                  <HandMetal className="h-6 w-6 text-[#FFF700]" />
+                  <span>Push-up Tracker</span>
+                </Link>
+                <Link
+                  to="/squattracker"
+                  className="flex items-center space-x-3 text-white text-lg transition-all duration-300 hover:text-[#FFF700] hover:scale-105"
+                >
+                  <Activity className="h-6 w-6 text-[#FFF700]" />
+                  <span>Squat Tracker</span>
                 </Link>
 
                 <Link
@@ -188,7 +204,7 @@ function Home() {
                 </Link>
 
                 <Link
-                  to="/share"
+                  to="/community"
                   className="flex items-center space-x-3 text-white text-lg transition-all duration-300 hover:text-[#FFF700] hover:scale-105"
                 >
                   <Users className="h-6 w-6 text-[#FFF700]" />
@@ -212,24 +228,21 @@ function Home() {
             </h1>
 
             {isUserLoggedIn ? (
-              <div className="space-y-2 mt-4">
+              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 justify-center mt-4">
                 <Link
-                  to="/planktracker"
-                  className="bg-[#FFF700] text-black px-4 sm:px-6 py-2 rounded-lg shadow-md block text-center font-bold text-sm sm:text-base"
+                  to="/dailychallenge"
+                  className="flex bg-[#FFF700] text-black px-4 sm:px-6 py-2 rounded-lg shadow-md font-bold text-sm sm:text-base"
                 >
-                  Plank Tracker
+                  <CalendarCheck className="h-6 w-6" />
+                  <span>Daily Challenge</span>
                 </Link>
+
                 <Link
-                  to="/pushuptracker"
-                  className="bg-[#FFEF00] text-black px-4 sm:px-6 py-2 rounded-lg shadow-md block text-center font-bold text-sm sm:text-base"
+                  to="/workouttracker"
+                  className="flex bg-white text-black px-4 sm:px-6 py-2 rounded-lg shadow-md font-bold text-sm sm:text-base"
                 >
-                  Push-up Tracker
-                </Link>
-                <Link
-                  to="/squattracker"
-                  className="bg-[#FFF700] text-black px-4 sm:px-6 py-2 rounded-lg shadow-md block text-center font-bold text-sm sm:text-base"
-                >
-                  Squat Tracker
+                  <Dumbbell className="h-6 w-6" />
+                  <span>Workout Tracker</span>
                 </Link>
               </div>
             ) : (
@@ -240,12 +253,6 @@ function Home() {
                 >
                   Get Started
                 </Link>
-                {/* <button
-                  onClick={() => setIsOpen(true)}
-                  className="bg-white text-black px-4 sm:px-6 py-2 rounded-lg shadow-md font-bold text-sm sm:text-base"
-                >
-                  Demo Video
-                </button> */}
               </div>
             )}
           </motion.div>
@@ -356,9 +363,11 @@ function Home() {
       {showBanner && (
         <div
           onClick={handleBannerClick}
-          className="fixed top-12 left-1/2 transform -translate-x-1/2 bg-[#FFF700] text-black text-lg lg:text-2xl font-bold py-2 px-4 rounded-lg shadow-lg transition-all duration-500 opacity-100 scale-100 animate-fadeIn cursor-pointer"
+          className="fixed flex flex-col lg:flex-row top-12 left-1/2 transform -translate-x-1/2 bg-[#FFF700] text-black text-lg lg:text-2xl font-bold py-2 px-4 rounded-lg shadow-lg transition-all duration-500 opacity-100 scale-100 animate-fadeIn cursor-pointer"
         >
-          🏆 Challenge: {challenge} | 🔄 Reps: {reps} | 🎯 Points: {points}
+          <span>🏆 Challenge: {challenge || "NA"}</span>
+          <span>🔄 Reps: {reps}</span>
+          <span>🎯 Points: {points}</span>
         </div>
       )}
     </div>

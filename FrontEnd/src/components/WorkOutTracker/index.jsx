@@ -4,8 +4,8 @@ import Webcam from "react-webcam"
 const WEBSOCKET_URL = "ws://localhost:8000/ws/workout"
 
 const WorkoutTracker = () => {
-  const [status, setStatus] = useState("Not Detected")
-  const [exerciseTime, setExerciseTime] = useState(0)
+  const [accuracy, setAccuracy] = useState(0)
+  const [frameNo, setFrameNo] = useState(1)
   const socketRef = useRef(null)
   const webcamRef = useRef(null)
 
@@ -19,8 +19,7 @@ const WorkoutTracker = () => {
 
     socketRef.current.onmessage = (event) => {
       const data = JSON.parse(event.data)
-      if (data.status) setStatus(data.status)
-      if (data.exerciseTime) setExerciseTime(data.exerciseTime)
+      if (data.accuracy) setStatus(data.accuracy)
     }
 
     socketRef.current.onclose = () => {
@@ -37,7 +36,11 @@ const WorkoutTracker = () => {
 
       if (imageSrc && socketRef.current.readyState === WebSocket.OPEN) {
         const base64data = imageSrc.split(",")[1]
-        socketRef.current.send(JSON.stringify({ frame: base64data }))
+        socketRef.current.send(JSON.stringify({
+          frame: base64data,
+          frame_No: frameNo
+        }))
+        setFrameNo(frameNo + 1)
       }
     }
 

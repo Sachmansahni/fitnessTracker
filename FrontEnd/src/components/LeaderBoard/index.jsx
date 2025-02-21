@@ -18,7 +18,7 @@ const LeaderBoardPage = () => {
     useEffect(() => {
         const fetchLeaderboard = async () => {
             try {
-                const response = await fetch("http://localhost:8000/leaderBoard"); // Replace with your API URL
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/leaderBoard`); // Replace with your API URL
                 const data = await response.json();
                 setUsers(data);
 
