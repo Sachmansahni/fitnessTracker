@@ -23,4 +23,12 @@ app.include_router(auth_router)
 
 @app.get("/")
 def home():
-    return {"message":"Fitness Tracker Backend is Running "}
+    return {
+        "status": "success",
+        "message": "Fitness Tracker Backend is Running",
+        "version": "1.0.0"
+    }
+
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", 8000))  # Default to 8000 if PORT is not set
+    uvicorn.run(app, host="0.0.0.0", port=port)
