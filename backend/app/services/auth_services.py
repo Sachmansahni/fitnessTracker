@@ -33,6 +33,7 @@ class User(BaseModel):
     email: str
     password: str
     totalScore: int
+    daily_challenge:str
 
 class Token(BaseModel):
     access_token: str
@@ -98,14 +99,15 @@ async def register(user: User):
         "email": user.email, 
         "password": hashed_password, 
         "totalScore":0,
+        "daily_challenge":"No Challenges available",
         "otp": otp
     })
     return {"message": "User registered successfully."}
 
-@router.post("/leaderBoard")
+@router.get("/leaderBoard")
 async def leaders(user:User):
     user_list = await users_collection.find().sort("score", -1).to_list(None) 
-     if not user_list:
+    if not user_list:
         raise HTTPException(status_code=404, detail="No users found")
     return {"leaderboard": user_list}
 
@@ -152,3 +154,51 @@ async def change_password(request: ChangePassSchema):
     await users_collection.update_one({"email":request.email}, {"$set":{"password":hashed_password}})
 
     return {"message":"Password updated successfully ."}
+
+exercises = [
+    { "name": "Planks", "reps": 30, "points": 10 },
+    { "name": "Squats", "reps": 15, "points": 15 },
+    { "name": "Push-ups", "reps": 20, "points": 20 },
+    { "name": "Planks", "reps": 60, "points": 20 },
+    { "name": "Squats", "reps": 25, "points": 25 },
+    { "name": "Push-ups", "reps": 30, "points": 30 },
+    { "name": "Planks", "reps": 90, "points": 30 },
+    { "name": "Squats", "reps": 35, "points": 35 },
+    { "name": "Push-ups", "reps": 40, "points": 40 },
+    { "name": "Planks", "reps": 120, "points": 40 },
+    { "name": "Squats", "reps": 45, "points": 45 },
+    { "name": "Push-ups", "reps": 50, "points": 50 },
+    { "name": "Planks", "reps": 150, "points": 50 },
+    { "name": "Squats", "reps": 55, "points": 55 },
+    { "name": "Push-ups", "reps": 60, "points": 60 },
+    { "name": "Planks", "reps": 180, "points": 60 },
+    { "name": "Squats", "reps": 60, "points": 60 },
+    { "name": "Push-ups", "reps": 70, "points": 70 }
+]
+
+def getDailyChallenge():
+    return random.choice(exercises)
+
+@router.get("/update-daily-challenge")
+async def update_daily_challenge():
+    users= await users_collection.find().to_list(None)
+
+    if not users:
+        raise HTTPException(status_code=404,detail="No users found in the database")
+
+    for user in users:
+        new_challenge=get_daily_challenge()
+        await users_collection.update_one(
+            {"_id":user["_id"]},
+            {"&set":{"daily_challenge":new_challenge}}
+        )
+    return {"message":"Daily challenge updated for all users!"}
+
+
+@router.get("/send-challenge")
+async def send_otp(request : EmailSchema):
+    user= await users_collection.find_one({"email":request.email})
+    if not user:
+        raise HTTPException(status_code=404,detail="email not registered")
+    
+    return {"daily-challenge":user.daily_challenge}

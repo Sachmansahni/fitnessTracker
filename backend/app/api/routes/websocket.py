@@ -16,13 +16,14 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
             try:
+                
                 # Receive the data from the client
                 data = await websocket.receive_text()
 
                 # Parse the incoming data (expecting a JSON object)
                 parsed_data = json.loads(data)
                 frame_data = base64.b64decode(parsed_data.get("frame"))  # Decode the base64 frame
-
+                target=parsed_data.get("target",None)
                 # Convert the decoded byte data to a numpy array
                 np_arr = np.frombuffer(frame_data, np.uint8)
                 img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
@@ -31,7 +32,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 img, lmList = exercise_inst.process_frame(img)
 
                 # Track all exercises and get feedback
-                feedback = exercise_inst.track_exercises(img, lmList)
+                feedback = exercise_inst.track_exercises(img, lmList, target)
 
                 # Send only the feedback data (without image)
                 await websocket.send_text(json.dumps(feedback))

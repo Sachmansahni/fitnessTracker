@@ -14,14 +14,12 @@ router = APIRouter()
 mp_pose = mp.solutions.pose
 pose = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
-# Function to load stored landmarks from a JSON file
 def load_stored_landmarks():
     json_file_path = os.path.join(os.path.dirname(__file__), 'selected_landmarks.json')
     with open(json_file_path, 'r') as file:
         data = json.load(file)
-    return data  # Adjusted to load the entire frame data
+    return data  
 
-# Load stored landmarks from the JSON file
 stored_landmarks = load_stored_landmarks()
 
 def process_frame(frame):
@@ -34,11 +32,9 @@ def calculate_accuracy(user_landmarks, stored_landmarks, frame_index, distance_t
     """Calculate the accuracy of detected landmarks."""
     matched_landmarks = 0
     total_landmarks = 0
-    
-    # Get the corresponding frame from stored_landmarks based on the frame_index
+
     stored_frame = stored_landmarks.get(f"frame_{frame_index}", {})
 
-    # Iterate over each stored frame's landmarks
     for landmark, stored_coords in stored_frame.items():
         if landmark in user_landmarks:
             user_coords = user_landmarks[landmark]
@@ -46,8 +42,7 @@ def calculate_accuracy(user_landmarks, stored_landmarks, frame_index, distance_t
             if distance <= distance_threshold:
                 matched_landmarks += 1
             total_landmarks += 1
-    
-    # Calculate accuracy
+y
     if total_landmarks == 0:
         return 0  # Avoid division by zero
     accuracy = (matched_landmarks / total_landmarks) * 100
