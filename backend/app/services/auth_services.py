@@ -15,12 +15,12 @@ load_dotenv()
 
 router = APIRouter()
 
-MONGO_URL = "mongodb+srv://sachman:namhcas@cluster0.izbq8.mongodb.net/"
+MONGO_URL = os.getenv("MONGO_URL")
 client = AsyncIOMotorClient(MONGO_URL)
 db = client["auth_db"]
 users_collection = db["users"]
 
-SECRET_KEY = "GHgfghjNBHUGhy56789IUJHGyukm"
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -69,7 +69,7 @@ async def send_email_otp(email: str, otp: str):
     
     try:
         message = EmailMessage()
-        message["From"] = "raunaksahni71@gmail.com" #os.getenv("EMAIL_ADDRESS")
+        message["From"] = os.getenv("EMAIL_ADDRESS")
         message["To"] = email
         message["Subject"] = "Your OTP for Password Reset"
         message.set_content(f"Your OTP for password reset is: {otp}. This OTP is valid for 5 minutes.")
@@ -78,7 +78,7 @@ async def send_email_otp(email: str, otp: str):
 
         await smtp.connect()
         # await smtp.starttls()
-        await smtp.login(("raunaksahni71@gmail.com"),("cagkosdjupqhvorz"))
+        await smtp.login(os.getenv("EMAIL_ADDRESS"), os.getenv("EMAIL_PASSWORD"))
         await smtp.send_message(message)
         await smtp.quit()
 
