@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 function AuthPopup() {
   const navigate = useNavigate();
-  const [type, setType] = useState("signup");
+  const [type, setType] = useState("login");
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -120,7 +120,7 @@ function AuthPopup() {
             <p>
               <button
                 className="text-[#FFF700] hover:underline"
-                onClick={() => navigate("/forgot-password")}
+                onClick={() => navigate("/forgotpassword")}
               >
                 Forgot Password?
               </button>
