@@ -6,3 +6,11 @@ bcrypt
 python-multipart 
 python-jose[cryptography]
 aiosmtplib
+opencv
+numpy
+base64
+json
+pydantic
+pyJWT
+email
+
