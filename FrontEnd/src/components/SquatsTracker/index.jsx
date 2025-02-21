@@ -93,28 +93,28 @@ function SquatTracker() {
                 <h2 className="text-[#FFD700] text-3xl lg:text-[50px] font-bold uppercase mt-4">Status</h2>
                 <p>
                     <span className="text-xl lg:text-[25px] text-[#FFD700] font-semibold">Squat Count: </span>
-                    <span className="text-3xl lg:text-[50px] text-[#FFFFFF] font-semibold">
+                    <span className="text-2xl lg:text-[30px] text-[#FFFFFF] font-semibold">
                         {feedback?.squat_reps}
                     </span>
                 </p>
 
                 <p>
                     <span className="text-xl lg:text-[25px] text-[#FFD700] font-semibold">Depth Accuracy: </span>
-                    <span className={`text-2xl lg:text-[50px] font-semibold ${feedback?.correct_squat ? "text-[#28a745]" : "text-[#dc3545]"}`}>
+                    <span className={`text-2xl lg:text-[30px] font-semibold ${feedback?.correct_squat ? "text-[#28a745]" : "text-[#dc3545]"}`}>
                         {feedback?.correct_squat ? "Good ✅" : "Too Shallow ❌"}
                     </span>
                 </p>
 
                 <p>
                     <span className="text-xl lg:text-[25px] text-[#FFD700] font-semibold">Posture Feedback: </span>
-                    <span className={`text-2xl lg:text-[50px] font-semibold ${feedback?.posture === "Good posture" ? "text-[#28a745]" : "text-[#dc3545]"}`}>
+                    <span className={`text-2xl lg:text-[30px] font-semibold ${feedback?.posture === "Good posture" ? "text-[#28a745]" : "text-[#dc3545]"}`}>
                         {feedback?.posture}
                     </span>
                 </p>
 
                 <p>
                     <span className="text-xl lg:text-[25px] text-[#FFD700] font-semibold">Message: </span>
-                    <span className="text-2xl lg:text-[50px] text-[#FFFFFF] font-semibold">{feedback?.squat_message}</span>
+                    <span className="text-2xl lg:text-[30px] text-[#FFFFFF] font-semibold">{feedback?.squat_message}</span>
                 </p>
             </div>
         </div>

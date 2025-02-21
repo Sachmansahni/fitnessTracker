@@ -6,6 +6,8 @@ import ForgotPassword from "../components/ForgotPassword";
 import PushupTracker from "../components/PushUpTracker";
 import SquatTracker from "../components/SquatsTracker";
 import LeaderBoard from "../components/LeaderBoard";
+import MyProfile from "../components/MyProfile";
+import Settings from "../components/Settings";
 
 const routes = [
   { path: "/", element: <Home /> },
@@ -14,6 +16,8 @@ const routes = [
   { path: "/pushuptracker", element: <PushupTracker /> },
   { path: "/squattracker", element: <SquatTracker /> },
   { path: "/workouttracker", element: <WorkoutTracker /> },
+  { path: "/profile", element: <MyProfile /> },
+  { path: "/settings", element:<Settings />},
   { path: "/auth", element: <AuthPopup /> },
   { path: "/forgotpassword", element: <ForgotPassword /> },
 ];

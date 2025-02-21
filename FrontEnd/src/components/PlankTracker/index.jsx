@@ -110,7 +110,7 @@ function PlankTracker() {
         <h2 className="text-[#FFD700] text-3xl lg:text-5xl font-bold uppercase mt-4">Status</h2>
         <p>
           <span className="text-xl lg:text-2xl text-[#FFD700] font-semibold">Plank Status: </span>
-          <span className={`${plank ? "text-[#FFD700]" : "text-white"} text-2xl lg:text-5xl font-semibold`}>
+          <span className={`${plank ? "text-[#FFD700]" : "text-white"} text-2xl lg:text-3xl font-semibold`}>
             {plank ? "Correct ✅" : "Incorrect ❌"}
           </span>
         </p>
@@ -132,12 +132,12 @@ function PlankTracker() {
               className="transition-all duration-300"
             />
           </svg>
-          <span className="absolute text-white text-2xl lg:text-4xl font-bold">{angle}°</span>
+          <span className="absolute text-white text-2xl lg:text-3xl font-bold">{angle}°</span>
         </span>
 
         <p>
           <span className="text-xl lg:text-2xl text-[#FFD700] font-semibold">Time Held: </span>
-          <span className="text-2xl lg:text-5xl text-[#FFFFFF] font-semibold"> {time_held} sec</span>
+          <span className="text-2xl lg:text-3xl text-[#FFFFFF] font-semibold"> {time_held} sec</span>
         </p>
         <p>
           <span className="text-xl lg:text-2xl text-[#FFD700] font-semibold">Message: </span>

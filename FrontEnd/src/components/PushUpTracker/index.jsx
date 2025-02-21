@@ -101,11 +101,11 @@ function PushupTracker() {
         <div>
           <p>
             <span className="text-xl lg:text-[25px] text-[#FFD700] font-semibold">Push-up Count: </span>
-            <span className="text-3xl lg:text-[50px] text-[#FFFFFF] font-semibold">{feedback?.pushup_reps}</span>
+            <span className="text-3xl lg:text-[30px] text-[#FFFFFF] font-semibold">{feedback?.pushup_reps}</span>
           </p>
           <p>
             <span className="text-xl lg:text-[25px] text-[#FFD700] font-semibold">Message: </span>
-            <span className="text-2xl lg:text-[50px] text-[#FFFFFF] font-semibold">{feedback?.pushup_message}</span>
+            <span className="text-2xl lg:text-[30px] text-[#FFFFFF] font-semibold">{feedback?.pushup_message}</span>
           </p>
         </div>
       </div>
